@@ -4,7 +4,7 @@ FROM golang:1.23 AS builder
 WORKDIR /app
 COPY . .
 RUN go mod download
-# main.go가 cmd에 위치함
+# main.go가 cmd에 위치하므로 ./cmd/main.go
 RUN go build -o myapp ./cmd/main.go  
 
 # 2단계: 앱을 실행하기 위한 최소 이미지의 준비
