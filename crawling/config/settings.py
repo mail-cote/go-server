@@ -2,9 +2,6 @@
 START_URLS = [
     {"field": "브론즈 5", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=1"},
     {"field": "브론즈 4", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=2"},
-    ]
-
-'''
     {"field": "브론즈 3", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=3"},
     {"field": "브론즈 2", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=4"},
     {"field": "브론즈 1", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=5"},
@@ -38,4 +35,4 @@ START_URLS = [
     {"field": "루비 3", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=28"},
     {"field": "루비 2", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=29"},
     {"field": "루비 1", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=30"},
-'''
+]

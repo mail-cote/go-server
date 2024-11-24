@@ -39,7 +39,7 @@ def get_problem_list(page_url):
             print(f"예외 발생: {e}")
             break
     
-    print(f"{page_url}에서 수집된 문제 수: {len(problems)}")
+    print(f"수집된 문제 수: {len(problems)}")
 
     return problems
 
@@ -55,29 +55,20 @@ def get_problem_details(problem_url):
     response.raise_for_status()
     soup = BeautifulSoup(response.text, 'html.parser')
 
+    # selector로 HTML 요소를 찾아 텍스트와 이미지 src를 순서대로 조합.
     def get_text_and_images(selector):
-        """
-        selector로 HTML 요소를 찾아 텍스트와 이미지 src를 순서대로 조합.
-        """
         element = soup.select_one(selector)
         if not element:
             return None
 
-        result = []
-        for content in element.contents:
-            # 텍스트 노드 처리
-            if isinstance(content, str):
-                text = content.strip()
-                if text:
-                    result.append(text)
-            # 이미지 노드 처리
-            elif content.name == "img":
-                img_src = content.get("src")
-                if img_src:
-                    result.append(f"[Image: {img_src}]")
-
-        # 순서대로 결합하여 문자열 반환
-        return "\n".join(result) if result else None
+        # 텍스트와 이미지를 순서대로 포함
+        result = element.text.strip()
+        images = element.find_all('img')
+        for img in images:
+            img_src = img.get('src')
+            if img_src:
+                result += f"\n[Image: {img_src}]"
+        return result
 
 
     return {
