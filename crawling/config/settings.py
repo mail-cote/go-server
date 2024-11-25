@@ -4,6 +4,8 @@ START_URLS = [
     {"field": "브론즈 4", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=2"},
 ]
 
+
+# 나눠서 할 때는 나머지 링크 아래로 빼야 함!!
 '''
     {"field": "브론즈 3", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=3"},
     {"field": "브론즈 2", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=4"},
