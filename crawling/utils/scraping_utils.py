@@ -1,7 +1,7 @@
 # 문제 리스트와 상세 정보를 수집하는 함수가 포함된 파일
 import logging
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, NavigableString
 
 logging.basicConfig(level=logging.INFO)
 
@@ -62,13 +62,21 @@ def get_problem_details(problem_url):
             return None
 
         # 텍스트와 이미지를 순서대로 포함
-        result = element.text.strip()
-        images = element.find_all('img')
-        for img in images:
-            img_src = img.get('src')
-            if img_src:
-                result += f"\n[Image: {img_src}]"
-        return result
+        
+        result = []
+        for child in element.descendants:
+            if isinstance(child, NavigableString):
+                # 텍스트 노드 처리
+                text = child.strip()
+                if text:
+                    result.append(text)
+            elif child.name == 'img':
+                # 이미지 노드 처리
+                img_src = child.get('src')
+                if img_src:
+                    result.append(f"[Image: {img_src}]")
+
+        return "\n".join(result)
 
 
     return {
