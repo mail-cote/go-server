@@ -17,8 +17,11 @@ def upload_problems(problems_file):
         field = problem["field"]  # 난이도
         quiz_num = problem["quiz_num"]  # 문제 번호
 
-        # GCS 경로 설정 (problems/field/quiz_num.json)
-        gcs_path = f"problems/{field}/{quiz_num}.json"
+        # field를 공백으로 나누어 'Bronze', '5'로 분리
+        grade, level = field.split()
+
+        # GCS 경로 설정 (problems/grade/level/quiz_num.json)
+        gcs_path = f"problems/{grade}/{level}/{quiz_num}.json"
 
         # JSON 데이터를 문자열로 변환
         json_data = json.dumps(problem, ensure_ascii=False, indent=4)
@@ -32,9 +35,11 @@ def upload_problems(problems_file):
 # GCS에서 특정 난이도의 문제를 랜덤으로 선택하는 함수
 def get_random_problem(field):
 
-    blobs = list(bucket.list_blobs(prefix=f"quizzes/{field}/"))
+    grade, level = field.split()
+
+    blobs = list(bucket.list_blobs(prefix=f"problems/{grade}/{level}"))
     if not blobs:
-        print(f"No problems found for field: {field}")
+        print(f"해당 난이도에 문제가 없음: {field}")
         return None
 
     # 랜덤으로 문제 선택
