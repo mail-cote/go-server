@@ -1,3 +1,3 @@
 credentials/
 crawling/data/problems.json
-crawling/data/problems.json
+*.json
