@@ -1,21 +1,22 @@
 # 크롤링 시작 URL
 START_URLS = [
-    {"field": "Bronze 5", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=1"},
-    {"field": "Bronze 4", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=2"},
-]
-
-
-# 나눠서 할 때는 나머지 링크 아래로 빼야 함!!
-'''
-    {"field": "Bronze 3", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=3"},
-    {"field": "Bronze 2", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=4"},
-    {"field": "Bronze 1", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=5"},
-
     {"field": "Silver 5", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=6"},
     {"field": "Silver 4", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=7"},
     {"field": "Silver 3", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=8"},
     {"field": "Silver 2", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=9"},
     {"field": "Silver 1", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=10"},
+]
+
+
+# 나눠서 할 때는 나머지 링크 아래로 빼야 함!!
+'''
+    {"field": "Bronze 5", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=1"},
+    {"field": "Bronze 4", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=2"},
+    {"field": "Bronze 3", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=3"},
+    {"field": "Bronze 2", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=4"},
+    {"field": "Bronze 1", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=5"},
+
+
 
     {"field": "Gold 5", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=11"},
     {"field": "Gold 4", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=12"},

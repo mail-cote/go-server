@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package member;
+
+// 회원 정보 메시지
+message Member {
+  string member_id = 1;    // 회원 ID
+  string email = 2;        // 이메일
+  string field = 3;        // 난이도
+  string password = 4;     // 비밀번호
+}
+
+// 요청 및 응답 메시지
+message CreateMemberRequest {
+  Member member = 1;
+}
+
+message UpdateMemberRequest {
+  string member_id = 1;
+  string field = 2;       // 새 난이도
+  string password = 3;    // 새 비밀번호
+}
+
+message DeleteMemberRequest {
+  string member_id = 1;
+}
+
+message Response {
+  string message = 1;
+}
+
+// Member Service 정의
+service MemberService {
+  rpc CreateMember (CreateMemberRequest) returns (Response);
+  rpc UpdateMember (UpdateMemberRequest) returns (Response);
+  rpc DeleteMember (DeleteMemberRequest) returns (Response);
+}

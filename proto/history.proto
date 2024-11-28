@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package history;
+
+// 발송 이력 메시지
+message History {
+  string history_id = 1;   // 이력 ID
+  string quiz_num = 2;     // 발송된 문제 번호
+  string member_id = 3;    // 회원 ID
+  string send_at = 4;      // 발송 시각
+  string field = 5;        // 문제 난이도
+}
+
+// 요청 및 응답 메시지
+message LogSentProblemRequest {
+  string quiz_num = 1;
+  string member_id = 2;
+  string send_at = 3;
+  string field = 4;
+}
+
+message GetHistoryRequest {
+  string member_id = 1;
+}
+
+message GetHistoryResponse {
+  repeated History histories = 1;
+}
+
+// History Service 정의
+service HistoryService {
+  rpc LogSentProblem (LogSentProblemRequest) returns (Response);
+  rpc GetHistoryByMember (GetHistoryRequest) returns (GetHistoryResponse);
+}

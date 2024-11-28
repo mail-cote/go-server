@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package problem;
+
+// 문제 데이터 메시지
+message Problem {
+  string quiz_num = 1;      // 문제 번호
+  string title = 2;         // 문제 제목
+  string description = 3;   // 문제 설명
+  string field = 4;         // 난이도
+}
+
+// GetProblemByNumber 요청 및 응답
+message GetProblemRequest {
+  string quiz_num = 1;
+}
+
+message GetProblemResponse {
+  Problem problem = 1;
+}
+
+// Problem Service 정의
+service ProblemService {
+  rpc GetProblemByNumber (GetProblemRequest) returns (GetProblemResponse);
+}

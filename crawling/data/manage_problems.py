@@ -7,6 +7,7 @@ client = storage.Client()
 bucket_name = "mail-cote-bucket"  # GCS 버킷 이름
 bucket = client.get_bucket(bucket_name)
 
+
 # problems.json에 있는 문제 데이터를 읽어서 GCS에 업로드
 def upload_problems(problems_file):
 
@@ -32,6 +33,7 @@ def upload_problems(problems_file):
         print(f"Uploaded: {gcs_path}")
 
 
+        
 # GCS에서 특정 난이도의 문제를 랜덤으로 선택하는 함수
 def get_random_problem(field):
 
@@ -49,6 +51,7 @@ def get_random_problem(field):
 
 
 if __name__ == "__main__":
+    
     # 1. 업로드할 문제 데이터 파일 경로
     problems_file = "problems.json"  # 로컬에 저장된 JSON 데이터 파일
 
@@ -58,11 +61,11 @@ if __name__ == "__main__":
 
     # ***** 테스트 *****
     # 3. 특정 난이도에서 랜덤 문제 가져오기
-    field = "브론즈 5"  # 난이도 선택
+    field = "Bronze 5"  # 난이도 선택
     print(f"\n랜덤 문제를 가져올 난이도: {field}...")
     random_problem = get_random_problem(field)
     if random_problem:
-        print(f"가져온 랜덤 문제: {random_problem['quiz_title']}")
+        print(f"가져온 랜덤 문제: {random_problem['quiz_title']}({random_problem['quiz_num']})")
 
 
 
