@@ -3,7 +3,7 @@ syntax = "proto3";
 package member.v1;
 
 // Go 패키지 경로 설정
-option go_package = "github.com/mail-cote/go-server/proto/member";
+option go_package = "github.com/mail-cote/go-server/proto/member/v1";
 
 // 회원 정보 메시지
 message Member {
