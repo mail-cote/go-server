@@ -1,35 +1,24 @@
-package memberservice
+package main
 
 import (
 	"log"
 	"net"
 
 	"google.golang.org/grpc"
-
-	pb "github.com/mail-cote/go-server/proto/member/v1"
 )
 
-const (
-	port = ":50052" // Member Service gRPC 포트
-)
+const portNumber = "50002"
 
 func main() {
-	// TCP 리스너 설정
-	lis, err := net.Listen("tcp", port)
+	lis, err := net.Listen("tcp", ":"+portNumber)
 	if err != nil {
-		log.Fatalf("Failed to listen: %v", err)
+		log.Fatalf("failed to listen: %v", err)
 	}
 
-	// gRPC 서버 생성
 	grpcServer := grpc.NewServer()
 
-	// MemberService 서버 등록
-	pb.RegisterMemberServiceServer(grpcServer, &MemberServiceServer{})
-
-	log.Printf("Member Service is running on port %s", port)
-
-	// 서버 시작
+	log.Printf("start gRPC server on %s port", portNumber)
 	if err := grpcServer.Serve(lis); err != nil {
-		log.Fatalf("Failed to serve: %v", err)
+		log.Fatalf("failed to serve: %s", err)
 	}
 }
