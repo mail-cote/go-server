@@ -2,6 +2,10 @@ syntax = "proto3";
 
 package history;
 
+// Go 패키지 경로 설정
+option go_package = "github.com/mail-cote/go-server/proto/history";
+
+
 // 발송 이력 메시지
 message History {
   string history_id = 1;   // 이력 ID
@@ -25,6 +29,11 @@ message GetHistoryRequest {
 
 message GetHistoryResponse {
   repeated History histories = 1;
+}
+
+// Response 메시지 정의
+message Response {
+  string message = 1; // 응답 메시지
 }
 
 // History Service 정의

@@ -1,12 +1,10 @@
-package main
+package problemservice
 
 import (
 	"log"
 	"net"
 
-	"github.com/mail-cote/go-server/problem-service/server" // server.go 파일 경로
-
-	pb "github.com/mail-cote/go-server/proto/problem" // Protobuf 파일에서 생성된 패키지 경로
+	pb "github.com/mail-cote/go-server/proto" // Protobuf 파일에서 생성된 패키지 경로
 
 	"google.golang.org/grpc"
 )
@@ -26,7 +24,7 @@ func main() {
 	grpcServer := grpc.NewServer()
 
 	// ProblemService 서버 등록
-	pb.RegisterProblemServiceServer(grpcServer, &server.ProblemServiceServer{})
+	pb.RegisterProblemServiceServer(grpcServer, ProblemServiceServer{})
 
 	log.Printf("Problem Service is running on port %s", port)
 

@@ -5,7 +5,9 @@ go 1.23.1
 require (
 	google.golang.org/grpc v1.68.0
 	google.golang.org/protobuf v1.35.2
+	github.com/mail-cote/go-server/proto v0.0.0
 )
+
 
 require (
 	golang.org/x/net v0.29.0 // indirect

@@ -1,11 +1,11 @@
-package server
+package problemservice
 
 import (
 	"context"
 	"fmt"
 	"io/ioutil"
 
-	pb "github.com/mail-cote/go-server/proto/problem" // Protobuf 파일에서 생성된 패키지 경로
+	pb "github.com/mail-cote/go-server/proto" // Protobuf 파일에서 생성된 패키지 경로
 
 	"google.golang.org/protobuf/encoding/protojson" // JSON 변환 라이브러리
 )
