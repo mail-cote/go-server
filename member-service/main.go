@@ -6,7 +6,7 @@ import (
 
 	"google.golang.org/grpc"
 
-	pb "github.com/mail-cote/go-server/proto/member"
+	pb "github.com/mail-cote/go-server/proto/member/v1"
 )
 
 const (
