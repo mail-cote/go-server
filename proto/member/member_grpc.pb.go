@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v5.29.0
-// source: proto/member.proto
+// source: proto/member/member.proto
 
 package member
 
@@ -19,9 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	MemberService_CreateMember_FullMethodName = "/member.MemberService/CreateMember"
-	MemberService_UpdateMember_FullMethodName = "/member.MemberService/UpdateMember"
-	MemberService_DeleteMember_FullMethodName = "/member.MemberService/DeleteMember"
+	MemberService_CreateMember_FullMethodName = "/member.v1.MemberService/CreateMember"
+	MemberService_UpdateMember_FullMethodName = "/member.v1.MemberService/UpdateMember"
+	MemberService_DeleteMember_FullMethodName = "/member.v1.MemberService/DeleteMember"
 )
 
 // MemberServiceClient is the client API for MemberService service.
@@ -30,9 +30,9 @@ const (
 //
 // Member Service 정의
 type MemberServiceClient interface {
-	CreateMember(ctx context.Context, in *CreateMemberRequest, opts ...grpc.CallOption) (*Response, error)
-	UpdateMember(ctx context.Context, in *UpdateMemberRequest, opts ...grpc.CallOption) (*Response, error)
-	DeleteMember(ctx context.Context, in *DeleteMemberRequest, opts ...grpc.CallOption) (*Response, error)
+	CreateMember(ctx context.Context, in *CreateMemberRequest, opts ...grpc.CallOption) (*CreateMemberResponse, error)
+	UpdateMember(ctx context.Context, in *UpdateMemberRequest, opts ...grpc.CallOption) (*UpdateMemberResponse, error)
+	DeleteMember(ctx context.Context, in *DeleteMemberRequest, opts ...grpc.CallOption) (*DeleteMemberResponse, error)
 }
 
 type memberServiceClient struct {
@@ -43,9 +43,9 @@ func NewMemberServiceClient(cc grpc.ClientConnInterface) MemberServiceClient {
 	return &memberServiceClient{cc}
 }
 
-func (c *memberServiceClient) CreateMember(ctx context.Context, in *CreateMemberRequest, opts ...grpc.CallOption) (*Response, error) {
+func (c *memberServiceClient) CreateMember(ctx context.Context, in *CreateMemberRequest, opts ...grpc.CallOption) (*CreateMemberResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Response)
+	out := new(CreateMemberResponse)
 	err := c.cc.Invoke(ctx, MemberService_CreateMember_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -53,9 +53,9 @@ func (c *memberServiceClient) CreateMember(ctx context.Context, in *CreateMember
 	return out, nil
 }
 
-func (c *memberServiceClient) UpdateMember(ctx context.Context, in *UpdateMemberRequest, opts ...grpc.CallOption) (*Response, error) {
+func (c *memberServiceClient) UpdateMember(ctx context.Context, in *UpdateMemberRequest, opts ...grpc.CallOption) (*UpdateMemberResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Response)
+	out := new(UpdateMemberResponse)
 	err := c.cc.Invoke(ctx, MemberService_UpdateMember_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -63,9 +63,9 @@ func (c *memberServiceClient) UpdateMember(ctx context.Context, in *UpdateMember
 	return out, nil
 }
 
-func (c *memberServiceClient) DeleteMember(ctx context.Context, in *DeleteMemberRequest, opts ...grpc.CallOption) (*Response, error) {
+func (c *memberServiceClient) DeleteMember(ctx context.Context, in *DeleteMemberRequest, opts ...grpc.CallOption) (*DeleteMemberResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Response)
+	out := new(DeleteMemberResponse)
 	err := c.cc.Invoke(ctx, MemberService_DeleteMember_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -79,9 +79,9 @@ func (c *memberServiceClient) DeleteMember(ctx context.Context, in *DeleteMember
 //
 // Member Service 정의
 type MemberServiceServer interface {
-	CreateMember(context.Context, *CreateMemberRequest) (*Response, error)
-	UpdateMember(context.Context, *UpdateMemberRequest) (*Response, error)
-	DeleteMember(context.Context, *DeleteMemberRequest) (*Response, error)
+	CreateMember(context.Context, *CreateMemberRequest) (*CreateMemberResponse, error)
+	UpdateMember(context.Context, *UpdateMemberRequest) (*UpdateMemberResponse, error)
+	DeleteMember(context.Context, *DeleteMemberRequest) (*DeleteMemberResponse, error)
 	mustEmbedUnimplementedMemberServiceServer()
 }
 
@@ -92,13 +92,13 @@ type MemberServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedMemberServiceServer struct{}
 
-func (UnimplementedMemberServiceServer) CreateMember(context.Context, *CreateMemberRequest) (*Response, error) {
+func (UnimplementedMemberServiceServer) CreateMember(context.Context, *CreateMemberRequest) (*CreateMemberResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateMember not implemented")
 }
-func (UnimplementedMemberServiceServer) UpdateMember(context.Context, *UpdateMemberRequest) (*Response, error) {
+func (UnimplementedMemberServiceServer) UpdateMember(context.Context, *UpdateMemberRequest) (*UpdateMemberResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateMember not implemented")
 }
-func (UnimplementedMemberServiceServer) DeleteMember(context.Context, *DeleteMemberRequest) (*Response, error) {
+func (UnimplementedMemberServiceServer) DeleteMember(context.Context, *DeleteMemberRequest) (*DeleteMemberResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteMember not implemented")
 }
 func (UnimplementedMemberServiceServer) mustEmbedUnimplementedMemberServiceServer() {}
@@ -180,7 +180,7 @@ func _MemberService_DeleteMember_Handler(srv interface{}, ctx context.Context, d
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var MemberService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "member.MemberService",
+	ServiceName: "member.v1.MemberService",
 	HandlerType: (*MemberServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -197,5 +197,5 @@ var MemberService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/member.proto",
+	Metadata: "proto/member/member.proto",
 }
