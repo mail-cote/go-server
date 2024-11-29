@@ -4,7 +4,7 @@ import (
 	"log"
 	"net"
 
-	pb "github.com/mail-cote/go-server/proto" // Protobuf 파일에서 생성된 패키지 경로
+	pb "github.com/mail-cote/go-server/proto/problem" // Protobuf 파일에서 생성된 패키지 경로
 
 	"google.golang.org/grpc"
 )
