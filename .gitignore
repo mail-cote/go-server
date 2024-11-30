@@ -1,3 +1,4 @@
 credentials/
 crawling/data/problems.json
 *.json
+.env
