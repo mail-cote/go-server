@@ -45,6 +45,7 @@ type MemberServiceServer struct {
 func NewMemberServiceServer() *MemberServiceServer {
 	// MySQL 연결
 	db, err := sql.Open("mysql", getDBSource()) // dbSource는 MySQL 정보
+
 	if err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
@@ -53,6 +54,8 @@ func NewMemberServiceServer() *MemberServiceServer {
 	if err := db.Ping(); err != nil {
 		log.Fatalf("Database is unreachable: %v", err)
 	}
+
+	log.Println("Database connection successful!")
 
 	return &MemberServiceServer{db: db}
 }
