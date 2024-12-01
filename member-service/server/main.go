@@ -47,12 +47,12 @@ func NewMemberServiceServer() *MemberServiceServer {
 	db, err := sql.Open("mysql", getDBSource()) // dbSource는 MySQL 정보
 
 	if err != nil {
-		log.Fatalf("Failed to connect to database: %v", err)
+		log.Fatalf("🚨 Failed to connect to database: %v", err)
 	}
 
 	// DB 연결 확인
 	if err := db.Ping(); err != nil {
-		log.Fatalf("Database is unreachable: %v", err)
+		log.Fatalf("🚨 Database is unreachable: %v", err)
 	}
 
 	log.Println("Database connection successful!")
@@ -64,13 +64,19 @@ func NewMemberServiceServer() *MemberServiceServer {
 func (s *MemberServiceServer) CreateMember(ctx context.Context, req *pb.CreateMemberRequest) (*pb.CreateMemberResponse, error) {
 	member := req.GetMember()
 	if member == nil {
-		return nil, errors.New("Member data is required")
+		return nil, errors.New("🚨 Member data is required")
 	}
 
+	// 입력값 검증
+	if member.Email == "" || member.Password == "" {
+		return nil, errors.New("🚨 Email and Password are required")
+	}
+
+	// 데이터베이스 쿼리
 	query := "INSERT INTO member (member_id, email, level, password) VALUES (?, ?, ?, ?)"
 	_, err := s.db.Exec(query, member.MemberId, member.Email, member.Level, member.Password)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to create member: %v", err)
+		return nil, fmt.Errorf("🚨 Failed to create member: %v", err)
 	}
 
 	return &pb.CreateMemberResponse{
@@ -83,12 +89,12 @@ func (s *MemberServiceServer) UpdateMember(ctx context.Context, req *pb.UpdateMe
 	query := "UPDATE member SET level = ?, password = ? WHERE member_id = ?"
 	result, err := s.db.Exec(query, req.Level, req.Password, req.MemberId)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to update member: %v", err)
+		return nil, fmt.Errorf("🚨 Failed to update member: %v", err)
 	}
 
 	rows, _ := result.RowsAffected()
 	if rows == 0 {
-		return nil, errors.New("No member found with the given ID")
+		return nil, errors.New("🚨 No member found with the given ID")
 	}
 
 	return &pb.UpdateMemberResponse{
@@ -101,12 +107,12 @@ func (s *MemberServiceServer) DeleteMember(ctx context.Context, req *pb.DeleteMe
 	query := "DELETE FROM member WHERE member_id = ?"
 	result, err := s.db.Exec(query, req.MemberId)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to delete member: %v", err)
+		return nil, fmt.Errorf("🚨 Failed to delete member: %v", err)
 	}
 
 	rows, _ := result.RowsAffected()
 	if rows == 0 {
-		return nil, errors.New("No member found with the given ID")
+		return nil, errors.New("🚨 No member found with the given ID")
 	}
 
 	return &pb.DeleteMemberResponse{
