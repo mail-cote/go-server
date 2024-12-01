@@ -9,7 +9,7 @@ package member;
 message Member {
   string member_id = 1;    // 회원 ID
   string email = 2;        // 이메일
-  string field = 3;        // 난이도
+  string level = 3;        // 난이도
   string password = 4;     // 비밀번호
 }
 
@@ -20,7 +20,7 @@ message CreateMemberRequest {
 
 message UpdateMemberRequest {
   string member_id = 1;
-  string field = 2;       // 새 난이도
+  string level = 2;       // 새 난이도
   string password = 3;    // 새 비밀번호
 }
 

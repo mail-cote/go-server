@@ -67,8 +67,8 @@ func (s *MemberServiceServer) CreateMember(ctx context.Context, req *pb.CreateMe
 		return nil, errors.New("Member data is required")
 	}
 
-	query := "INSERT INTO member (member_id, email, field, password) VALUES (?, ?, ?, ?)"
-	_, err := s.db.Exec(query, member.MemberId, member.Email, member.Field, member.Password)
+	query := "INSERT INTO member (member_id, email, level, password) VALUES (?, ?, ?, ?)"
+	_, err := s.db.Exec(query, member.MemberId, member.Email, member.Level, member.Password)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to create member: %v", err)
 	}
@@ -80,8 +80,8 @@ func (s *MemberServiceServer) CreateMember(ctx context.Context, req *pb.CreateMe
 
 // 기능2. UpdateMember: 회원 정보 업데이트
 func (s *MemberServiceServer) UpdateMember(ctx context.Context, req *pb.UpdateMemberRequest) (*pb.UpdateMemberResponse, error) {
-	query := "UPDATE member SET field = ?, password = ? WHERE member_id = ?"
-	result, err := s.db.Exec(query, req.Field, req.Password, req.MemberId)
+	query := "UPDATE member SET level = ?, password = ? WHERE member_id = ?"
+	result, err := s.db.Exec(query, req.Level, req.Password, req.MemberId)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to update member: %v", err)
 	}
