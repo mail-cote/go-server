@@ -19,13 +19,13 @@ message CreateMemberRequest {
 }
 
 message UpdateMemberRequest {
-  string member_id = 1;
+  int32 member_id = 1;
   string level = 2;       // 새 난이도
   string password = 3;    // 새 비밀번호
 }
 
 message DeleteMemberRequest {
-  string member_id = 1;
+  int32 member_id = 1;
 }
 
 message CreateMemberResponse {

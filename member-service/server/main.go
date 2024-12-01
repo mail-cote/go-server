@@ -8,6 +8,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"time"
 
 	pb "github.com/mail-cote/go-server/member-service/member"
 	"google.golang.org/grpc"
@@ -73,7 +74,7 @@ func (s *MemberServiceServer) CreateMember(ctx context.Context, req *pb.CreateMe
 	}
 
 	// 데이터베이스 쿼리
-	query := "INSERT INTO member (email, level, password) VALUES (?, ?, ?)"
+	query := "INSERT INTO Member (email, level, password) VALUES (?, ?, ?)"
 	_, err := s.db.Exec(query, member.Email, member.Level, member.Password)
 	if err != nil {
 		return nil, fmt.Errorf("🚨 Failed to create member: %v", err)
@@ -86,7 +87,7 @@ func (s *MemberServiceServer) CreateMember(ctx context.Context, req *pb.CreateMe
 
 // 기능2. UpdateMember: 회원 정보 업데이트
 func (s *MemberServiceServer) UpdateMember(ctx context.Context, req *pb.UpdateMemberRequest) (*pb.UpdateMemberResponse, error) {
-	query := "UPDATE member SET level = ?, password = ? WHERE member_id = ?"
+	query := "UPDATE Member SET level = ?, password = ? WHERE member_id = ?"
 	result, err := s.db.Exec(query, req.Level, req.Password, req.MemberId)
 	if err != nil {
 		return nil, fmt.Errorf("🚨 Failed to update member: %v", err)
@@ -104,7 +105,7 @@ func (s *MemberServiceServer) UpdateMember(ctx context.Context, req *pb.UpdateMe
 
 // 기능3. DeleteMember: 회원 삭제
 func (s *MemberServiceServer) DeleteMember(ctx context.Context, req *pb.DeleteMemberRequest) (*pb.DeleteMemberResponse, error) {
-	query := "DELETE FROM member WHERE member_id = ?"
+	query := "DELETE FROM Member WHERE member_id = ?"
 	result, err := s.db.Exec(query, req.MemberId)
 	if err != nil {
 		return nil, fmt.Errorf("🚨 Failed to delete member: %v", err)
@@ -121,14 +122,79 @@ func (s *MemberServiceServer) DeleteMember(ctx context.Context, req *pb.DeleteMe
 }
 
 // ******************* 클라이언트 테스트 *****************************
-// Member 테이블에 데이터를 삽입하는 테스트
+// 1. CreateMember 테스트
 func testInsertData(db *sql.DB) {
 	query := "INSERT INTO Member (email, password, level) VALUES (?, ?, ?)"
-	_, err := db.Exec(query, "testuser@example.com", "securepassword", "gold")
+	_, err := db.Exec(query, "testuser@example.com", "password", "silver")
 	if err != nil {
 		log.Fatalf("Failed to insert test data: %v", err)
 	}
-	log.Println("Test data inserted successfully!")
+	log.Println("✅ Test data inserted successfully!")
+}
+
+// 2. UpdateMember 테스트
+func testUpdateMember(s *MemberServiceServer) {
+	// 테스트 데이터 준비
+	insertQuery := "INSERT INTO Member (email, level, password) VALUES (?, ?, ?)"
+	result, err := s.db.Exec(insertQuery, "updatetest@example.com", "bronze", "oldpassword")
+	if err != nil {
+		log.Fatalf("🚨 Failed to insert test data: %v", err)
+	}
+
+	// 삽입된 데이터의 ID 확인
+	lastInsertID, err := result.LastInsertId()
+	if err != nil {
+		log.Fatalf("🚨 Failed to retrieve last insert ID: %v", err)
+	}
+
+	// UpdateMember 요청 생성
+	req := &pb.UpdateMemberRequest{
+		MemberId: int32(lastInsertID), // int를 string으로 변환
+		Level:    "gold",
+		Password: "newpassword",
+	}
+
+	// UpdateMember 호출
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	resp, err := s.UpdateMember(ctx, req)
+	if err != nil {
+		log.Fatalf("🚨 UpdateMember failed: %v", err)
+	}
+
+	log.Printf("✅ UpdateMember response: %s", resp.Message)
+}
+
+func testDeleteMember(s *MemberServiceServer) {
+	// 테스트 데이터 준비
+	insertQuery := "INSERT INTO Member (email, level, password) VALUES (?, ?, ?)"
+	result, err := s.db.Exec(insertQuery, "deletetest@example.com", "silver", "password")
+	if err != nil {
+		log.Fatalf("🚨 Failed to insert test data: %v", err)
+	}
+
+	// 삽입된 데이터의 ID 확인
+	lastInsertID, err := result.LastInsertId()
+	if err != nil {
+		log.Fatalf("🚨 Failed to retrieve last insert ID: %v", err)
+	}
+
+	// DeleteMember 요청 생성
+	req := &pb.DeleteMemberRequest{
+		MemberId: int32(lastInsertID), // int를 string으로 변환
+	}
+
+	// DeleteMember 호출
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	resp, err := s.DeleteMember(ctx, req)
+	if err != nil {
+		log.Fatalf("🚨 DeleteMember failed: %v", err)
+	}
+
+	log.Printf("✅ DeleteMember response: %s", resp.Message)
 }
 
 func main() {
@@ -141,12 +207,18 @@ func main() {
 	// gRPC 서버 생성
 	grpcServer := grpc.NewServer()
 
-	// MemberService 서버 등록
+	// MemberService 서버 초기화
 	server := NewMemberServiceServer()
 	defer server.db.Close() // 서버 종료 시 DB 연결 닫기
 
-	// 테스트 데이터 삽입
+	// CreateMember 테스트
 	testInsertData(server.db)
+
+	// UpdateMember 테스트
+	testUpdateMember(server)
+
+	// DeleteMember 테스트
+	testDeleteMember(server)
 
 	pb.RegisterMemberServiceServer(grpcServer, server)
 
