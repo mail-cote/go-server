@@ -7,11 +7,11 @@ package member;
 
 // 회원 정보 메시지
 message Member {
-  string member_id = 1;    // 회원 ID
-  string email = 2;        // 이메일
-  string level = 3;        // 난이도
-  string password = 4;     // 비밀번호
+  string email = 1;        // 이메일
+  string level = 2;        // 난이도
+  string password = 3;     // 비밀번호
 }
+
 
 // 요청 및 응답 메시지
 message CreateMemberRequest {

@@ -73,8 +73,8 @@ func (s *MemberServiceServer) CreateMember(ctx context.Context, req *pb.CreateMe
 	}
 
 	// 데이터베이스 쿼리
-	query := "INSERT INTO member (member_id, email, level, password) VALUES (?, ?, ?, ?)"
-	_, err := s.db.Exec(query, member.MemberId, member.Email, member.Level, member.Password)
+	query := "INSERT INTO member (email, level, password) VALUES (?, ?, ?)"
+	_, err := s.db.Exec(query, member.Email, member.Level, member.Password)
 	if err != nil {
 		return nil, fmt.Errorf("🚨 Failed to create member: %v", err)
 	}
@@ -120,6 +120,17 @@ func (s *MemberServiceServer) DeleteMember(ctx context.Context, req *pb.DeleteMe
 	}, nil
 }
 
+// ******************* 클라이언트 테스트 *****************************
+// Member 테이블에 데이터를 삽입하는 테스트
+func testInsertData(db *sql.DB) {
+	query := "INSERT INTO Member (email, password, level) VALUES (?, ?, ?)"
+	_, err := db.Exec(query, "testuser@example.com", "securepassword", "gold")
+	if err != nil {
+		log.Fatalf("Failed to insert test data: %v", err)
+	}
+	log.Println("Test data inserted successfully!")
+}
+
 func main() {
 	// TCP 리스너 설정
 	lis, err := net.Listen("tcp", port)
@@ -133,6 +144,9 @@ func main() {
 	// MemberService 서버 등록
 	server := NewMemberServiceServer()
 	defer server.db.Close() // 서버 종료 시 DB 연결 닫기
+
+	// 테스트 데이터 삽입
+	testInsertData(server.db)
 
 	pb.RegisterMemberServiceServer(grpcServer, server)
 
