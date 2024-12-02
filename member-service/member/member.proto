@@ -40,9 +40,19 @@ message DeleteMemberResponse {
   string message = 1;
 }
 
+// 이메일로 회원 ID 조회
+message GetMemberByEmailRequest {
+  string email = 1;
+}
+
+message GetMemberByEmailResponse {
+  int32 member_id = 1;
+}
+
 // Member Service 정의
 service MemberService {
   rpc CreateMember (CreateMemberRequest) returns (CreateMemberResponse);
   rpc UpdateMember (UpdateMemberRequest) returns (UpdateMemberResponse);
   rpc DeleteMember (DeleteMemberRequest) returns (DeleteMemberResponse);  
+  rpc GetMemberByEmail (GetMemberByEmailRequest) returns (GetMemberByEmailResponse);
 }

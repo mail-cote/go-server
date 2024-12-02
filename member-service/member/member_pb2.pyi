@@ -53,3 +53,15 @@ class DeleteMemberResponse(_message.Message):
     MESSAGE_FIELD_NUMBER: _ClassVar[int]
     message: str
     def __init__(self, message: _Optional[str] = ...) -> None: ...
+
+class GetMemberByEmailRequest(_message.Message):
+    __slots__ = ("email",)
+    EMAIL_FIELD_NUMBER: _ClassVar[int]
+    email: str
+    def __init__(self, email: _Optional[str] = ...) -> None: ...
+
+class GetMemberByEmailResponse(_message.Message):
+    __slots__ = ("member_id",)
+    MEMBER_ID_FIELD_NUMBER: _ClassVar[int]
+    member_id: int
+    def __init__(self, member_id: _Optional[int] = ...) -> None: ...

@@ -60,6 +60,20 @@ func NewMemberServiceServer() *MemberServiceServer {
 	return &MemberServiceServer{db: db}
 }
 
+// 이메일로 회원 ID 조회
+func (s *MemberServiceServer) GetMemberByEmail(ctx context.Context, req *pb.GetMemberByEmailRequest) (*pb.GetMemberByEmailResponse, error) {
+	var memberID int32
+	query := "SELECT member_id FROM Member WHERE email = ?"
+	err := s.db.QueryRow(query, req.Email).Scan(&memberID)
+	if err != nil {
+		return nil, errors.New("🚨 No member found with the given email")
+	}
+
+	return &pb.GetMemberByEmailResponse{
+		MemberId: memberID,
+	}, nil
+}
+
 // 기능1. CreateMember: 새 회원 생성
 func (s *MemberServiceServer) CreateMember(ctx context.Context, req *pb.CreateMemberRequest) (*pb.CreateMemberResponse, error) {
 	member := req.GetMember()
@@ -80,7 +94,7 @@ func (s *MemberServiceServer) CreateMember(ctx context.Context, req *pb.CreateMe
 	}
 
 	return &pb.CreateMemberResponse{
-		Message: "✅ Member created successfully",
+		Message: "✅ 반가워요! 앞으로 매일 문제를 보내드릴게요 😎",
 	}, nil
 }
 
@@ -98,7 +112,7 @@ func (s *MemberServiceServer) UpdateMember(ctx context.Context, req *pb.UpdateMe
 	}
 
 	return &pb.UpdateMemberResponse{
-		Message: "✅ Member updated successfully",
+		Message: "✅ 정보가 수정되었습니다.",
 	}, nil
 }
 
@@ -116,7 +130,7 @@ func (s *MemberServiceServer) DeleteMember(ctx context.Context, req *pb.DeleteMe
 	}
 
 	return &pb.DeleteMemberResponse{
-		Message: "✅ Member deleted successfully",
+		Message: "✅ 다음에 또 만나요!",
 	}, nil
 }
 
@@ -202,7 +216,7 @@ func main() {
 	// TCP 리스너 설정
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
-		log.Fatalf("Failed to listen: %v", err)
+		log.Fatalf("🚨 Failed to listen: %v", err)
 	}
 
 	// gRPC 서버 생성
@@ -223,10 +237,10 @@ func main() {
 
 	pb.RegisterMemberServiceServer(grpcServer, server)
 
-	log.Printf("Member Service is running on port %s", port)
+	log.Printf("✅ Member Service is running on port %s", port)
 
 	// 서버 시작
 	if err := grpcServer.Serve(lis); err != nil {
-		log.Fatalf("Failed to serve: %v", err)
+		log.Fatalf("🚨 Failed to serve: %v", err)
 	}
 }
