@@ -125,7 +125,7 @@ func (s *MemberServiceServer) DeleteMember(ctx context.Context, req *pb.DeleteMe
 // 1. CreateMember 테스트
 func testInsertData(db *sql.DB) {
 	query := "INSERT INTO Member (email, password, level) VALUES (?, ?, ?)"
-	_, err := db.Exec(query, "testuser@example.com", "password", "silver")
+	_, err := db.Exec(query, "testuser@example.com", "password", "silver2")
 	if err != nil {
 		log.Fatalf("Failed to insert test data: %v", err)
 	}
@@ -136,7 +136,7 @@ func testInsertData(db *sql.DB) {
 func testUpdateMember(s *MemberServiceServer) {
 	// 테스트 데이터 준비
 	insertQuery := "INSERT INTO Member (email, level, password) VALUES (?, ?, ?)"
-	result, err := s.db.Exec(insertQuery, "updatetest@example.com", "bronze", "oldpassword")
+	result, err := s.db.Exec(insertQuery, "updatetest@example.com", "bronze3", "oldpassword")
 	if err != nil {
 		log.Fatalf("🚨 Failed to insert test data: %v", err)
 	}
@@ -150,7 +150,7 @@ func testUpdateMember(s *MemberServiceServer) {
 	// UpdateMember 요청 생성
 	req := &pb.UpdateMemberRequest{
 		MemberId: int32(lastInsertID), // int를 string으로 변환
-		Level:    "gold",
+		Level:    "gold2",
 		Password: "newpassword",
 	}
 
@@ -169,7 +169,7 @@ func testUpdateMember(s *MemberServiceServer) {
 func testDeleteMember(s *MemberServiceServer) {
 	// 테스트 데이터 준비
 	insertQuery := "INSERT INTO Member (email, level, password) VALUES (?, ?, ?)"
-	result, err := s.db.Exec(insertQuery, "deletetest@example.com", "silver", "password")
+	result, err := s.db.Exec(insertQuery, "deletetest@example.com", "silver1", "password")
 	if err != nil {
 		log.Fatalf("🚨 Failed to insert test data: %v", err)
 	}
