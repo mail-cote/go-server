@@ -55,7 +55,7 @@ func NewMemberServiceServer() *MemberServiceServer {
 		log.Fatalf("🚨 Database is unreachable: %v", err)
 	}
 
-	log.Println("Database connection successful!")
+	log.Println("✅ Database connection successful!")
 
 	return &MemberServiceServer{db: db}
 }
@@ -80,7 +80,7 @@ func (s *MemberServiceServer) CreateMember(ctx context.Context, req *pb.CreateMe
 	}
 
 	return &pb.CreateMemberResponse{
-		Message: "Member created successfully",
+		Message: "✅ Member created successfully",
 	}, nil
 }
 
@@ -98,7 +98,7 @@ func (s *MemberServiceServer) UpdateMember(ctx context.Context, req *pb.UpdateMe
 	}
 
 	return &pb.UpdateMemberResponse{
-		Message: "Member updated successfully",
+		Message: "✅ Member updated successfully",
 	}, nil
 }
 
@@ -116,7 +116,7 @@ func (s *MemberServiceServer) DeleteMember(ctx context.Context, req *pb.DeleteMe
 	}
 
 	return &pb.DeleteMemberResponse{
-		Message: "Member deleted successfully",
+		Message: "✅ Member deleted successfully",
 	}, nil
 }
 
