@@ -21,20 +21,24 @@ class CreateMemberRequest(_message.Message):
     def __init__(self, member: _Optional[_Union[Member, _Mapping]] = ...) -> None: ...
 
 class UpdateMemberRequest(_message.Message):
-    __slots__ = ("member_id", "level", "password")
+    __slots__ = ("member_id", "level", "password", "old_password")
     MEMBER_ID_FIELD_NUMBER: _ClassVar[int]
     LEVEL_FIELD_NUMBER: _ClassVar[int]
     PASSWORD_FIELD_NUMBER: _ClassVar[int]
+    OLD_PASSWORD_FIELD_NUMBER: _ClassVar[int]
     member_id: int
     level: str
     password: str
-    def __init__(self, member_id: _Optional[int] = ..., level: _Optional[str] = ..., password: _Optional[str] = ...) -> None: ...
+    old_password: str
+    def __init__(self, member_id: _Optional[int] = ..., level: _Optional[str] = ..., password: _Optional[str] = ..., old_password: _Optional[str] = ...) -> None: ...
 
 class DeleteMemberRequest(_message.Message):
-    __slots__ = ("member_id",)
+    __slots__ = ("member_id", "old_password")
     MEMBER_ID_FIELD_NUMBER: _ClassVar[int]
+    OLD_PASSWORD_FIELD_NUMBER: _ClassVar[int]
     member_id: int
-    def __init__(self, member_id: _Optional[int] = ...) -> None: ...
+    old_password: str
+    def __init__(self, member_id: _Optional[int] = ..., old_password: _Optional[str] = ...) -> None: ...
 
 class CreateMemberResponse(_message.Message):
     __slots__ = ("message",)

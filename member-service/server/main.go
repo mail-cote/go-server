@@ -94,14 +94,28 @@ func (s *MemberServiceServer) CreateMember(ctx context.Context, req *pb.CreateMe
 	}
 
 	return &pb.CreateMemberResponse{
-		Message: "✅ 반가워요! 앞으로 매일 문제를 보내드릴게요 😎",
+		Message: "✅ 반가워요! 앞으로 매일 문제를 보내드릴게요 🖐️",
 	}, nil
 }
 
 // 기능2. UpdateMember: 회원 정보 업데이트
 func (s *MemberServiceServer) UpdateMember(ctx context.Context, req *pb.UpdateMemberRequest) (*pb.UpdateMemberResponse, error) {
-	query := "UPDATE Member SET level = ?, password = ? WHERE member_id = ?"
-	result, err := s.db.Exec(query, req.Level, req.Password, req.MemberId)
+	// 기존 비밀번호 확인
+	var currentPassword string
+	query := "SELECT password FROM Member WHERE member_id = ?"
+	err := s.db.QueryRow(query, req.MemberId).Scan(&currentPassword)
+	if err != nil {
+		return nil, errors.New("🚨 Member not found or error fetching data")
+	}
+
+	// 비밀번호 비교
+	if currentPassword != req.OldPassword {
+		return nil, errors.New("🚨 Incorrect password")
+	}
+
+	// 업데이트 실행
+	updateQuery := "UPDATE Member SET level = ?, password = ? WHERE member_id = ?"
+	result, err := s.db.Exec(updateQuery, req.Level, req.Password, req.MemberId)
 	if err != nil {
 		return nil, fmt.Errorf("🚨 Failed to update member: %v", err)
 	}
@@ -118,8 +132,22 @@ func (s *MemberServiceServer) UpdateMember(ctx context.Context, req *pb.UpdateMe
 
 // 기능3. DeleteMember: 회원 삭제
 func (s *MemberServiceServer) DeleteMember(ctx context.Context, req *pb.DeleteMemberRequest) (*pb.DeleteMemberResponse, error) {
-	query := "DELETE FROM Member WHERE member_id = ?"
-	result, err := s.db.Exec(query, req.MemberId)
+	// 기존 비밀번호 확인
+	var currentPassword string
+	query := "SELECT password FROM Member WHERE member_id = ?"
+	err := s.db.QueryRow(query, req.MemberId).Scan(&currentPassword)
+	if err != nil {
+		return nil, errors.New("🚨 Member not found or error fetching data")
+	}
+
+	// 비밀번호 비교
+	if currentPassword != req.OldPassword {
+		return nil, errors.New("🚨 Incorrect password")
+	}
+
+	// 삭제 실행
+	deleteQuery := "DELETE FROM Member WHERE member_id = ?"
+	result, err := s.db.Exec(deleteQuery, req.MemberId)
 	if err != nil {
 		return nil, fmt.Errorf("🚨 Failed to delete member: %v", err)
 	}

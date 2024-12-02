@@ -22,10 +22,12 @@ message UpdateMemberRequest {
   int32 member_id = 1;
   string level = 2;       // 새 난이도
   string password = 3;    // 새 비밀번호
+  string old_password = 4; // 기존 비밀번호  --> 비밀번호 대조를 위함!
 }
 
 message DeleteMemberRequest {
   int32 member_id = 1;
+  string old_password = 2; // 기존 비밀번호
 }
 
 message CreateMemberResponse {
