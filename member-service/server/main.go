@@ -8,7 +8,6 @@ import (
 	"log"
 	"net"
 	"os"
-	"time"
 
 	pb "github.com/mail-cote/go-server/member-service/member"
 	"google.golang.org/grpc"
@@ -123,6 +122,7 @@ func (s *MemberServiceServer) DeleteMember(ctx context.Context, req *pb.DeleteMe
 
 // ******************* 클라이언트 테스트 *****************************
 // 1. CreateMember 테스트
+/*
 func testInsertData(db *sql.DB) {
 	query := "INSERT INTO Member (email, password, level) VALUES (?, ?, ?)"
 	_, err := db.Exec(query, "testuser@example.com", "password", "silver2")
@@ -196,6 +196,7 @@ func testDeleteMember(s *MemberServiceServer) {
 
 	log.Printf("✅ DeleteMember response: %s", resp.Message)
 }
+*/
 
 func main() {
 	// TCP 리스너 설정
@@ -212,13 +213,13 @@ func main() {
 	defer server.db.Close() // 서버 종료 시 DB 연결 닫기
 
 	// CreateMember 테스트
-	testInsertData(server.db)
+	// testInsertData(server.db)
 
 	// UpdateMember 테스트
-	testUpdateMember(server)
+	// testUpdateMember(server)
 
 	// DeleteMember 테스트
-	testDeleteMember(server)
+	// testDeleteMember(server)
 
 	pb.RegisterMemberServiceServer(grpcServer, server)
 

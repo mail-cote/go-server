@@ -1,0 +1,55 @@
+from google.protobuf import descriptor as _descriptor
+from google.protobuf import message as _message
+from typing import ClassVar as _ClassVar, Mapping as _Mapping, Optional as _Optional, Union as _Union
+
+DESCRIPTOR: _descriptor.FileDescriptor
+
+class Member(_message.Message):
+    __slots__ = ("email", "level", "password")
+    EMAIL_FIELD_NUMBER: _ClassVar[int]
+    LEVEL_FIELD_NUMBER: _ClassVar[int]
+    PASSWORD_FIELD_NUMBER: _ClassVar[int]
+    email: str
+    level: str
+    password: str
+    def __init__(self, email: _Optional[str] = ..., level: _Optional[str] = ..., password: _Optional[str] = ...) -> None: ...
+
+class CreateMemberRequest(_message.Message):
+    __slots__ = ("member",)
+    MEMBER_FIELD_NUMBER: _ClassVar[int]
+    member: Member
+    def __init__(self, member: _Optional[_Union[Member, _Mapping]] = ...) -> None: ...
+
+class UpdateMemberRequest(_message.Message):
+    __slots__ = ("member_id", "level", "password")
+    MEMBER_ID_FIELD_NUMBER: _ClassVar[int]
+    LEVEL_FIELD_NUMBER: _ClassVar[int]
+    PASSWORD_FIELD_NUMBER: _ClassVar[int]
+    member_id: int
+    level: str
+    password: str
+    def __init__(self, member_id: _Optional[int] = ..., level: _Optional[str] = ..., password: _Optional[str] = ...) -> None: ...
+
+class DeleteMemberRequest(_message.Message):
+    __slots__ = ("member_id",)
+    MEMBER_ID_FIELD_NUMBER: _ClassVar[int]
+    member_id: int
+    def __init__(self, member_id: _Optional[int] = ...) -> None: ...
+
+class CreateMemberResponse(_message.Message):
+    __slots__ = ("message",)
+    MESSAGE_FIELD_NUMBER: _ClassVar[int]
+    message: str
+    def __init__(self, message: _Optional[str] = ...) -> None: ...
+
+class UpdateMemberResponse(_message.Message):
+    __slots__ = ("message",)
+    MESSAGE_FIELD_NUMBER: _ClassVar[int]
+    message: str
+    def __init__(self, message: _Optional[str] = ...) -> None: ...
+
+class DeleteMemberResponse(_message.Message):
+    __slots__ = ("message",)
+    MESSAGE_FIELD_NUMBER: _ClassVar[int]
+    message: str
+    def __init__(self, message: _Optional[str] = ...) -> None: ...
