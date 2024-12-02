@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package mail.v1;
+
+option go_package = "github.com/mail-cote/go-server/mail-service/mail/v1";
+
+service Mail {
+    // 1. mysql 연결 후, 유저 정보 가져오기-> 이건 어짜피 다른 모듈에서 해야하는거니까 넘겨도 됨.
+    // 2. 버킷에서 랜덤 파일 가져오기
+    // 3. smtp로 메일 전송하기
+    rpc FetchQuizFromBucket (FetchQuizFromBucketRequest) returns (FetchQuizFromBucketResponse);
+    rpc SendMail (SendMailRequest) returns (SendMailResponse);
+}
+
+message FetchQuizFromBucketRequest {
+    string level = 1;
+}
+
+message FetchQuizFromBucketResponse {
+    string quizContent = 1;
+    string message = 2;
+}
+
+message SendMailRequest {
+    string sendTo = 1;
+    string sendFrom = 2;
+    string quizContent = 3;
+}
+
+message SendMailResponse {
+    string message = 1;
+}
