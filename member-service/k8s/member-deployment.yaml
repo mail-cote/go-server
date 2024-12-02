@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: member-service
+  labels:
+    app: member-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: member-service
+  template:
+    metadata:
+      labels:
+        app: member-service
+    spec:
+      containers:
+      - name: member-service
+        image: gcr.io/gifted-bongo-442811-h6/member-service:latest
+        ports:
+        - containerPort: 50052 # gRPC 서버가 사용하는 포트
