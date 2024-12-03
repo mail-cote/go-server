@@ -4,7 +4,7 @@
 // - protoc             v5.28.3
 // source: mail-service/mail/mail.proto
 
-package v1
+package mail
 
 import (
 	context "context"
@@ -19,8 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Mail_FetchQuizFromBucket_FullMethodName = "/mail.v1.Mail/FetchQuizFromBucket"
-	Mail_SendMail_FullMethodName            = "/mail.v1.Mail/SendMail"
+	Mail_FetchQuizFromBucket_FullMethodName = "/mail.Mail/FetchQuizFromBucket"
+	Mail_SendMail_FullMethodName            = "/mail.Mail/SendMail"
 )
 
 // MailClient is the client API for Mail service.
@@ -148,7 +148,7 @@ func _Mail_SendMail_Handler(srv interface{}, ctx context.Context, dec func(inter
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Mail_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "mail.v1.Mail",
+	ServiceName: "mail.Mail",
 	HandlerType: (*MailServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

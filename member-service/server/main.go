@@ -7,30 +7,30 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"os"
 
 	pb "github.com/mail-cote/go-server/member-service/member"
 	"google.golang.org/grpc"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/joho/godotenv"
 )
 
 const port = ":50052" // gRPC 포트
 
+/*
 func init() {
 	err := godotenv.Load(".env")
 	if err != nil {
 		log.Fatalf("Error loading .env file")
 	}
 }
+*/
 
 func getDBSource() string {
-	dbUser := os.Getenv("DB_USER")
-	dbPassword := os.Getenv("DB_PASSWORD")
-	dbHost := os.Getenv("DB_HOST")
-	dbPort := os.Getenv("DB_PORT")
-	dbName := os.Getenv("DB_NAME")
+	dbUser := "root"         // 사용자명
+	dbPassword := "gdsc1111" // 비밀번호
+	dbHost := "34.22.95.16"  // 데이터베이스 호스트
+	dbPort := "3306"         // 데이터베이스 포트
+	dbName := "mail_cote"    // 데이터베이스 이름
 
 	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPassword, dbHost, dbPort, dbName)
 }

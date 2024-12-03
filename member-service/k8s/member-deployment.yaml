@@ -16,6 +16,19 @@ spec:
     spec:
       containers:
       - name: member-service
-        image: gcr.io/gifted-bongo-442811-h6/member-service:latest
+        image: asia-northeast3-docker.pkg.dev/gifted-bongo-442811-h6/member-docker-repo/yoonheoz/member-service:1.0
         ports:
-        - containerPort: 50052 # gRPC 서버가 사용하는 포트
+        - containerPort: 50052 # gRPC member 서버가 사용하는 포트
+
+        
+        env:
+        - name: DB_USER
+          value: "root"
+        - name: DB_PASSWORD
+          value: "gdsc1111"
+        - name: DB_HOST
+          value: "34.22.95.16"
+        - name: DB_PORT
+          value: "3306"
+        - name: DB_NAME
+          value: "mail_cote"

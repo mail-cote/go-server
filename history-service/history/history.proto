@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package history;
+
+option go_package = "github.com/mail-cote/go-server/history-service/history";
+
+service History {
+    // 1. history 저장하기
+    // 2. history 조회하기
+    rpc saveHistory (saveHistoryRequest) returns (saveHistoryResponse);
+    rpc getAllHistory (getAllHistoryRequest) returns (getAllHistoryResponse);
+}
+
+message saveHistoryRequest {
+    string level = 1;
+    int64 userId = 2;
+    int64 quizId = 3;
+}
+
+message saveHistoryResponse {}
+
+message getAllHistoryRequest {
+    int64 userId = 1;
+}
+
+message getAllHistoryResponse {
+    repeated int64 quizIds = 1;
+}
