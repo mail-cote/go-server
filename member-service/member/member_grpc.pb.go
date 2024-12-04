@@ -23,6 +23,7 @@ const (
 	MemberService_UpdateMember_FullMethodName     = "/member.MemberService/UpdateMember"
 	MemberService_DeleteMember_FullMethodName     = "/member.MemberService/DeleteMember"
 	MemberService_GetMemberByEmail_FullMethodName = "/member.MemberService/GetMemberByEmail"
+	MemberService_GetAllMember_FullMethodName     = "/member.MemberService/GetAllMember"
 )
 
 // MemberServiceClient is the client API for MemberService service.
@@ -35,6 +36,7 @@ type MemberServiceClient interface {
 	UpdateMember(ctx context.Context, in *UpdateMemberRequest, opts ...grpc.CallOption) (*UpdateMemberResponse, error)
 	DeleteMember(ctx context.Context, in *DeleteMemberRequest, opts ...grpc.CallOption) (*DeleteMemberResponse, error)
 	GetMemberByEmail(ctx context.Context, in *GetMemberByEmailRequest, opts ...grpc.CallOption) (*GetMemberByEmailResponse, error)
+	GetAllMember(ctx context.Context, in *GetAllMemberRequest, opts ...grpc.CallOption) (*GetAllMemberResponse, error)
 }
 
 type memberServiceClient struct {
@@ -85,6 +87,16 @@ func (c *memberServiceClient) GetMemberByEmail(ctx context.Context, in *GetMembe
 	return out, nil
 }
 
+func (c *memberServiceClient) GetAllMember(ctx context.Context, in *GetAllMemberRequest, opts ...grpc.CallOption) (*GetAllMemberResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetAllMemberResponse)
+	err := c.cc.Invoke(ctx, MemberService_GetAllMember_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MemberServiceServer is the server API for MemberService service.
 // All implementations must embed UnimplementedMemberServiceServer
 // for forward compatibility.
@@ -95,6 +107,7 @@ type MemberServiceServer interface {
 	UpdateMember(context.Context, *UpdateMemberRequest) (*UpdateMemberResponse, error)
 	DeleteMember(context.Context, *DeleteMemberRequest) (*DeleteMemberResponse, error)
 	GetMemberByEmail(context.Context, *GetMemberByEmailRequest) (*GetMemberByEmailResponse, error)
+	GetAllMember(context.Context, *GetAllMemberRequest) (*GetAllMemberResponse, error)
 	mustEmbedUnimplementedMemberServiceServer()
 }
 
@@ -116,6 +129,9 @@ func (UnimplementedMemberServiceServer) DeleteMember(context.Context, *DeleteMem
 }
 func (UnimplementedMemberServiceServer) GetMemberByEmail(context.Context, *GetMemberByEmailRequest) (*GetMemberByEmailResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMemberByEmail not implemented")
+}
+func (UnimplementedMemberServiceServer) GetAllMember(context.Context, *GetAllMemberRequest) (*GetAllMemberResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllMember not implemented")
 }
 func (UnimplementedMemberServiceServer) mustEmbedUnimplementedMemberServiceServer() {}
 func (UnimplementedMemberServiceServer) testEmbeddedByValue()                       {}
@@ -210,6 +226,24 @@ func _MemberService_GetMemberByEmail_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MemberService_GetAllMember_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllMemberRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MemberServiceServer).GetAllMember(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MemberService_GetAllMember_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MemberServiceServer).GetAllMember(ctx, req.(*GetAllMemberRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MemberService_ServiceDesc is the grpc.ServiceDesc for MemberService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -232,6 +266,10 @@ var MemberService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetMemberByEmail",
 			Handler:    _MemberService_GetMemberByEmail_Handler,
+		},
+		{
+			MethodName: "GetAllMember",
+			Handler:    _MemberService_GetAllMember_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

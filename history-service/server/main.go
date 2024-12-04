@@ -46,11 +46,19 @@ func NewHistoryServer() *historyServer {
 
 	log.Println("Database connection successful!")
 
-	return &historyServer{DB: db}
+	server := &historyServer{DB: db}
+	if server == nil {
+		log.Fatal("🚨 Failed to initialize historyServer!")
+	}
+
+	return server
 }
 
 // 1. history 조회 -> userid가 같은 내용만
-func (s *historyServer) getAllHistory(ctx context.Context, req *historypb.GetAllHistoryRequest) (*historypb.GetAllHistoryResponse, error) {
+func (s *historyServer) GetAllHistory(ctx context.Context, req *historypb.GetAllHistoryRequest) (*historypb.GetAllHistoryResponse, error) {
+	if s == nil {
+		return nil, fmt.Errorf("🚨 historyServer is nil")
+	}
 	if req == nil {
 		return nil, errors.New("🚨 request object is nil")
 	}
@@ -93,17 +101,17 @@ func (s *historyServer) getAllHistory(ctx context.Context, req *historypb.GetAll
 }
 
 // 2. history 저장
-func (s *historyServer) saveHistory(ctx context.Context, req *historypb.SaveHistoryRequest) (*historypb.SaveHistoryResponse, error) {
+func (s *historyServer) SaveHistory(ctx context.Context, req *historypb.SaveHistoryRequest) (*historypb.SaveHistoryResponse, error) {
 	userId := req.GetUserId()
 	quizId := req.GetQuizId()
 	level := req.GetLevel()
 
 	if userId == 0 || quizId == 0 || level == "" {
-		return nil, errors.New("🚨 Data is required")
+		return nil, fmt.Errorf("🚨 Data is required. userId: %d / quizId: %d / level: %s", userId, quizId, level)
 	}
 
 	// 데이터베이스 쿼리
-	query := "INSERT INTO History (user_id, quiz_id, level) VALUES (?, ?, ?)"
+	query := "INSERT INTO History (member_id, quiz_id, level, send_at) VALUES (?, ?, ?, NOW())"
 	_, err := s.DB.Exec(query, userId, quizId, level)
 	if err != nil {
 		return nil, fmt.Errorf("🚨 Failed to create history: %v", err)
@@ -121,11 +129,11 @@ func main() {
 
 	// gRPC 서버 생성
 	grpcServer := grpc.NewServer()
-
-	// MemberService 서버 초기화
+	// historyserver 서버 초기화
 	server := NewHistoryServer()
-	defer server.DB.Close() // 서버 종료 시 DB 연결 닫기
-
+	if server == nil {
+		log.Fatalf("🚨 Failed to create History server")
+	}
 	log.Printf("History Service is running on port %s", port)
 
 	historypb.RegisterHistoryServer(grpcServer, server)

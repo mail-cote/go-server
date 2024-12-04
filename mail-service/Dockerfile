@@ -29,6 +29,8 @@ RUN go mod tidy
 
 # mail-service 디렉터리를 통째로 복사
 COPY ./mail-service ./mail-service
+COPY ./history-service ./history-service
+COPY ./member-service ./member-service
 
 # mail-service 디렉터리로 이동하여 gRPC 파일 생성
 WORKDIR /app/mail-service    
@@ -38,8 +40,11 @@ RUN protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_o
 RUN go get github.com/go-sql-driver/mysql \
     github.com/joho/godotenv \
     google.golang.org/grpc
-RUN go get github.com/mail-cote/go-server/mail-service/mail 
 RUN go get github.com/mail-cote/go-server/history-service/history
+RUN go get github.com/mail-cote/go-server/mail-service/mail 
+RUN go get github.com/mail-cote/go-server/member-service/member 
+
+RUN go get cloud.google.com/go/storage
 
 # 컨테이너 내 /app/mail-service/server/main.go를 빌드하여 실행 가능한 바이너리 파일 server를 생성
 RUN go build -o server_binary ./server/main.go

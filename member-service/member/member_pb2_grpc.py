@@ -55,6 +55,11 @@ class MemberServiceStub(object):
                 request_serializer=member__pb2.GetMemberByEmailRequest.SerializeToString,
                 response_deserializer=member__pb2.GetMemberByEmailResponse.FromString,
                 _registered_method=True)
+        self.GetAllMember = channel.unary_unary(
+                '/member.MemberService/GetAllMember',
+                request_serializer=member__pb2.GetAllMemberRequest.SerializeToString,
+                response_deserializer=member__pb2.GetAllMemberResponse.FromString,
+                _registered_method=True)
 
 
 class MemberServiceServicer(object):
@@ -85,6 +90,12 @@ class MemberServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetAllMember(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_MemberServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -107,6 +118,11 @@ def add_MemberServiceServicer_to_server(servicer, server):
                     servicer.GetMemberByEmail,
                     request_deserializer=member__pb2.GetMemberByEmailRequest.FromString,
                     response_serializer=member__pb2.GetMemberByEmailResponse.SerializeToString,
+            ),
+            'GetAllMember': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetAllMember,
+                    request_deserializer=member__pb2.GetAllMemberRequest.FromString,
+                    response_serializer=member__pb2.GetAllMemberResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -218,6 +234,33 @@ class MemberService(object):
             '/member.MemberService/GetMemberByEmail',
             member__pb2.GetMemberByEmailRequest.SerializeToString,
             member__pb2.GetMemberByEmailResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetAllMember(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/member.MemberService/GetAllMember',
+            member__pb2.GetAllMemberRequest.SerializeToString,
+            member__pb2.GetAllMemberResponse.FromString,
             options,
             channel_credentials,
             insecure,

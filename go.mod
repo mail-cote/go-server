@@ -57,7 +57,6 @@ require (
 
 require (
 	github.com/go-sql-driver/mysql v1.8.1
-	github.com/joho/godotenv v1.5.1
 	golang.org/x/text v0.20.0 // indirect
 	google.golang.org/grpc v1.68.0
 )

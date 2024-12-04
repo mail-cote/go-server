@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0cmember.proto\x12\x06member\"8\n\x06Member\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\r\n\x05level\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\"5\n\x13\x43reateMemberRequest\x12\x1e\n\x06member\x18\x01 \x01(\x0b\x32\x0e.member.Member\"_\n\x13UpdateMemberRequest\x12\x11\n\tmember_id\x18\x01 \x01(\x05\x12\r\n\x05level\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\x12\x14\n\x0cold_password\x18\x04 \x01(\t\">\n\x13\x44\x65leteMemberRequest\x12\x11\n\tmember_id\x18\x01 \x01(\x05\x12\x14\n\x0cold_password\x18\x02 \x01(\t\"\'\n\x14\x43reateMemberResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\"\'\n\x14UpdateMemberResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\"\'\n\x14\x44\x65leteMemberResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\"(\n\x17GetMemberByEmailRequest\x12\r\n\x05\x65mail\x18\x01 \x01(\t\"-\n\x18GetMemberByEmailResponse\x12\x11\n\tmember_id\x18\x01 \x01(\x05\x32\xc7\x02\n\rMemberService\x12I\n\x0c\x43reateMember\x12\x1b.member.CreateMemberRequest\x1a\x1c.member.CreateMemberResponse\x12I\n\x0cUpdateMember\x12\x1b.member.UpdateMemberRequest\x1a\x1c.member.UpdateMemberResponse\x12I\n\x0c\x44\x65leteMember\x12\x1b.member.DeleteMemberRequest\x1a\x1c.member.DeleteMemberResponse\x12U\n\x10GetMemberByEmail\x12\x1f.member.GetMemberByEmailRequest\x1a .member.GetMemberByEmailResponseB6Z4github.com/mail-cote/go-server/member-service/memberb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0cmember.proto\x12\x06member\"3\n\x01M\x12\x10\n\x08memberId\x18\x01 \x01(\x03\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\r\n\x05level\x18\x03 \x01(\t\"8\n\x06Member\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\r\n\x05level\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\"5\n\x13\x43reateMemberRequest\x12\x1e\n\x06member\x18\x01 \x01(\x0b\x32\x0e.member.Member\"_\n\x13UpdateMemberRequest\x12\x11\n\tmember_id\x18\x01 \x01(\x05\x12\r\n\x05level\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\x12\x14\n\x0cold_password\x18\x04 \x01(\t\">\n\x13\x44\x65leteMemberRequest\x12\x11\n\tmember_id\x18\x01 \x01(\x05\x12\x14\n\x0cold_password\x18\x02 \x01(\t\"\'\n\x14\x43reateMemberResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\"\'\n\x14UpdateMemberResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\"\'\n\x14\x44\x65leteMemberResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\"(\n\x17GetMemberByEmailRequest\x12\r\n\x05\x65mail\x18\x01 \x01(\t\"-\n\x18GetMemberByEmailResponse\x12\x11\n\tmember_id\x18\x01 \x01(\x05\"\x15\n\x13GetAllMemberRequest\"1\n\x14GetAllMemberResponse\x12\x19\n\x06member\x18\x01 \x03(\x0b\x32\t.member.M2\x92\x03\n\rMemberService\x12I\n\x0c\x43reateMember\x12\x1b.member.CreateMemberRequest\x1a\x1c.member.CreateMemberResponse\x12I\n\x0cUpdateMember\x12\x1b.member.UpdateMemberRequest\x1a\x1c.member.UpdateMemberResponse\x12I\n\x0c\x44\x65leteMember\x12\x1b.member.DeleteMemberRequest\x1a\x1c.member.DeleteMemberResponse\x12U\n\x10GetMemberByEmail\x12\x1f.member.GetMemberByEmailRequest\x1a .member.GetMemberByEmailResponse\x12I\n\x0cGetAllMember\x12\x1b.member.GetAllMemberRequest\x1a\x1c.member.GetAllMemberResponseB6Z4github.com/mail-cote/go-server/member-service/memberb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -32,24 +32,30 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'member_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'Z4github.com/mail-cote/go-server/member-service/member'
-  _globals['_MEMBER']._serialized_start=24
-  _globals['_MEMBER']._serialized_end=80
-  _globals['_CREATEMEMBERREQUEST']._serialized_start=82
-  _globals['_CREATEMEMBERREQUEST']._serialized_end=135
-  _globals['_UPDATEMEMBERREQUEST']._serialized_start=137
-  _globals['_UPDATEMEMBERREQUEST']._serialized_end=232
-  _globals['_DELETEMEMBERREQUEST']._serialized_start=234
-  _globals['_DELETEMEMBERREQUEST']._serialized_end=296
-  _globals['_CREATEMEMBERRESPONSE']._serialized_start=298
-  _globals['_CREATEMEMBERRESPONSE']._serialized_end=337
-  _globals['_UPDATEMEMBERRESPONSE']._serialized_start=339
-  _globals['_UPDATEMEMBERRESPONSE']._serialized_end=378
-  _globals['_DELETEMEMBERRESPONSE']._serialized_start=380
-  _globals['_DELETEMEMBERRESPONSE']._serialized_end=419
-  _globals['_GETMEMBERBYEMAILREQUEST']._serialized_start=421
-  _globals['_GETMEMBERBYEMAILREQUEST']._serialized_end=461
-  _globals['_GETMEMBERBYEMAILRESPONSE']._serialized_start=463
-  _globals['_GETMEMBERBYEMAILRESPONSE']._serialized_end=508
-  _globals['_MEMBERSERVICE']._serialized_start=511
-  _globals['_MEMBERSERVICE']._serialized_end=838
+  _globals['_M']._serialized_start=24
+  _globals['_M']._serialized_end=75
+  _globals['_MEMBER']._serialized_start=77
+  _globals['_MEMBER']._serialized_end=133
+  _globals['_CREATEMEMBERREQUEST']._serialized_start=135
+  _globals['_CREATEMEMBERREQUEST']._serialized_end=188
+  _globals['_UPDATEMEMBERREQUEST']._serialized_start=190
+  _globals['_UPDATEMEMBERREQUEST']._serialized_end=285
+  _globals['_DELETEMEMBERREQUEST']._serialized_start=287
+  _globals['_DELETEMEMBERREQUEST']._serialized_end=349
+  _globals['_CREATEMEMBERRESPONSE']._serialized_start=351
+  _globals['_CREATEMEMBERRESPONSE']._serialized_end=390
+  _globals['_UPDATEMEMBERRESPONSE']._serialized_start=392
+  _globals['_UPDATEMEMBERRESPONSE']._serialized_end=431
+  _globals['_DELETEMEMBERRESPONSE']._serialized_start=433
+  _globals['_DELETEMEMBERRESPONSE']._serialized_end=472
+  _globals['_GETMEMBERBYEMAILREQUEST']._serialized_start=474
+  _globals['_GETMEMBERBYEMAILREQUEST']._serialized_end=514
+  _globals['_GETMEMBERBYEMAILRESPONSE']._serialized_start=516
+  _globals['_GETMEMBERBYEMAILRESPONSE']._serialized_end=561
+  _globals['_GETALLMEMBERREQUEST']._serialized_start=563
+  _globals['_GETALLMEMBERREQUEST']._serialized_end=584
+  _globals['_GETALLMEMBERRESPONSE']._serialized_start=586
+  _globals['_GETALLMEMBERRESPONSE']._serialized_end=635
+  _globals['_MEMBERSERVICE']._serialized_start=638
+  _globals['_MEMBERSERVICE']._serialized_end=1040
 # @@protoc_insertion_point(module_scope)

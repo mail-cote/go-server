@@ -162,6 +162,39 @@ func (s *MemberServiceServer) DeleteMember(ctx context.Context, req *pb.DeleteMe
 	}, nil
 }
 
+func (s *MemberServiceServer) GetAllMember(ctx context.Context, req *pb.GetAllMemberRequest) (*pb.GetAllMemberResponse, error) {
+	// SQL 쿼리
+	query := "SELECT member_id, email, level FROM Member"
+	rows, err := s.db.Query(query) // db.Query를 사용하여 다중 결과를 읽어야 함
+	if err != nil {
+		return nil, fmt.Errorf("🚨 Failed to fetch members: %v", err)
+	}
+	defer rows.Close()
+
+	// Member 데이터를 저장할 슬라이스
+	var members []*pb.M
+
+	// 결과 읽기
+	for rows.Next() {
+		var member pb.M
+		if err := rows.Scan(&member.MemberId, &member.Email, &member.Level); err != nil {
+			return nil, fmt.Errorf("🚨 Failed to scan row: %w", err)
+		}
+		members = append(members, &member)
+	}
+
+	// 반복 중 에러가 발생했는지 체크
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("🚨 Rows iteration error: %w", err)
+	}
+
+	// 응답 생성
+	response := &pb.GetAllMemberResponse{
+		Member: members,
+	}
+	return response, nil
+}
+
 // ******************* 클라이언트 테스트 *****************************
 // 1. CreateMember 테스트
 /*

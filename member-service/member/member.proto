@@ -5,13 +5,18 @@ option go_package = "github.com/mail-cote/go-server/member-service/member";
 
 package member;
 
+message M {
+  int64 memberId = 1;
+  string email = 2;
+  string level = 3;
+}
+
 // 회원 정보 메시지
 message Member {
   string email = 1;        // 이메일
   string level = 2;        // 난이도
   string password = 3;     // 비밀번호
 }
-
 
 // 요청 및 응답 메시지
 message CreateMemberRequest {
@@ -51,10 +56,17 @@ message GetMemberByEmailResponse {
   int32 member_id = 1;
 }
 
+message GetAllMemberRequest {}
+
+message GetAllMemberResponse {
+  repeated M member = 1;
+}
+
 // Member Service 정의
 service MemberService {
   rpc CreateMember (CreateMemberRequest) returns (CreateMemberResponse);
   rpc UpdateMember (UpdateMemberRequest) returns (UpdateMemberResponse);
   rpc DeleteMember (DeleteMemberRequest) returns (DeleteMemberResponse);  
   rpc GetMemberByEmail (GetMemberByEmailRequest) returns (GetMemberByEmailResponse);
+  rpc GetAllMember (GetAllMemberRequest) returns (GetAllMemberResponse);
 }
