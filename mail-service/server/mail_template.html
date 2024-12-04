@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mail-Cote</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 700px;
+        }
+        h4 {
+            font-size: 18px;
+            color: #555;
+            margin: 0 0 10px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+        .header .field {
+            font-size: 14px;
+            color: #888;
+        }
+        h1 {
+            font-size: 20px;
+            color: #333;
+            margin: 20px 0;
+        }
+        .subheading {
+            font-size: 16px;
+            color: #444;
+            margin: 15px 0 5px;
+        }
+        .description {
+            font-size: 14px;
+            color: #333;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+        .description img {
+            display: block;
+            margin: 10px 0;
+            max-width: 100%;
+            height: auto;
+        }
+        .code-block {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 14px;
+            color: #333;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .btn {
+            display: inline-block;
+            text-decoration: none;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 15px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 5px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <h4>Mail-Cote</h4>
+            <span class="field">{{.Field}}</span>
+        </div>
+
+        <!-- Title Section -->
+        <h1>오늘의 문제: {{.QuizTitle}}</h1>
+
+        <!-- Time and Memory Limit Section -->
+        <p><strong>Time Limit:</strong> {{.TimeLimit}}</p>
+        <p><strong>Memory Limit:</strong> {{.MemoryLimit}}</p>
+
+        <!-- Description Section -->
+        <h2 class="subheading">문제 설명:</h2>
+        <div class="description">
+            {{range $index, $line := .DescriptionLines}}
+                {{if $line.IsImage}}
+                    <img src="{{$line.Content}}" alt="Image">
+                {{else}}
+                    {{$line.Content}}<br>
+                {{end}}
+            {{end}}
+        </div>
+
+        <!-- Input Description Section -->
+        <h2 class="subheading">입력 설명:</h2>
+        <div class="description">
+            {{.InputDesc}}
+        </div>
+
+        <!-- Output Description Section -->
+        <h2 class="subheading">출력 설명:</h2>
+        <div class="description">
+            {{.OutputDesc}}
+        </div>
+
+        <!-- Input Example Section -->
+        <h2 class="subheading">입력 예제:</h2>
+        <div class="code-block">{{.InputEx}}</div>
+
+        <!-- Output Example Section -->
+        <h2 class="subheading">출력 예제:</h2>
+        <div class="code-block">{{.OutputEx}}</div>
+
+        <!-- View Problem Button -->
+        <a class="btn" href="{{.URL}}" target="_blank">문제 보기</a>
+    </div>
+</body>
+</html>
