@@ -2,7 +2,10 @@ module github.com/mail-cote/go-server
 
 go 1.23.1
 
-require google.golang.org/protobuf v1.35.2
+require (
+	cloud.google.com/go/storage v1.47.0
+	google.golang.org/protobuf v1.35.2
+)
 
 require (
 	cel.dev/expr v0.18.0 // indirect
@@ -12,7 +15,6 @@ require (
 	cloud.google.com/go/compute/metadata v0.5.2 // indirect
 	cloud.google.com/go/iam v1.2.2 // indirect
 	cloud.google.com/go/monitoring v1.21.2 // indirect
-	cloud.google.com/go/storage v1.47.0 // indirect
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/detectors/gcp v1.25.0 // indirect
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/metric v0.49.0 // indirect

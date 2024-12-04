@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package mail.v1;
 
-option go_package = "github.com/mail-cote/go-server/mail-service/mail/v1";
+option go_package = "github.com/mail-cote/go-server/mail-service/mail";
 
 service Mail {
     // 1. mysql 연결 후, 유저 정보 가져오기-> 이건 어짜피 다른 모듈에서 해야하는거니까 넘겨도 됨.
@@ -17,8 +17,9 @@ message FetchQuizFromBucketRequest {
 }
 
 message FetchQuizFromBucketResponse {
-    string quizContent = 1;
-    string message = 2;
+    int64 quizId = 1;
+    string quizContent = 2;
+    string message = 3;
 }
 
 message SendMailRequest {
