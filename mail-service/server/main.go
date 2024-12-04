@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"context"
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"html/template"
@@ -229,6 +230,10 @@ func (s *mailServer) SendMail(ctx context.Context, req *mailpb.SendMailRequest) 
 	client, err := smtp.NewClient(conn, SMTPServer)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create SMTP client: %v", err)
+	}
+	// STARTTLS 연결 (암호화)
+	if err := client.StartTLS(&tls.Config{InsecureSkipVerify: true}); err != nil {
+		return nil, fmt.Errorf("failed to start TLS: %v", err)
 	}
 
 	// SMTP 인증
