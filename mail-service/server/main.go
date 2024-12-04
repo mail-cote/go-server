@@ -12,6 +12,7 @@ import (
 	"math/rand"
 	"net"
 	"net/smtp"
+	"strconv"
 	"strings"
 	"time"
 	"unicode"
@@ -99,6 +100,17 @@ func (s *mailServer) FetchQuizFromBucket(ctx context.Context, req *mailpb.FetchQ
 	rand.Seed(time.Now().UnixNano())
 	randomFile := files[rand.Intn(len(files))]
 
+	// 파일 경로를 "/"로 분리하여 배열로 만든 후, 마지막 부분을 가져옵니다.
+	parts := strings.Split(randomFile, "/")
+	quizIdStr := parts[len(parts)-1] // 배열에서 마지막 부분을 가져옴 (예: "5087.json")
+
+	quizIdStr = quizIdStr[:len(quizIdStr)-5] // ".json"을 제거
+	// 숫자 문자열을 int64로 변환
+	quizId, err := strconv.ParseInt(quizIdStr, 10, 64)
+	if err != nil {
+		return nil, fmt.Errorf("invalid quiz id in filename: %v", err)
+	}
+
 	rc, err := client.Bucket(BucketName).Object(randomFile).NewReader(ctxGCP)
 	if err != nil {
 		return nil, err
@@ -111,6 +123,7 @@ func (s *mailServer) FetchQuizFromBucket(ctx context.Context, req *mailpb.FetchQ
 	}
 
 	return &mailpb.FetchQuizFromBucketResponse{
+		QuizId:      quizId,
 		QuizContent: string(content),
 		Message:     "Quiz successfully fetched!",
 	}, nil
@@ -316,6 +329,7 @@ func dailyTask(s *mailServer, historyClient historypb.HistoryClient) {
 
 				// 퀴즈의 고유 ID 확인 (예: 파일 이름 또는 JSON 내 ID)
 				quizID := quizResponse.GetQuizId()
+				log.Printf("Quiz number: %d", quizID)
 				if !sentQuizIDs[quizID] {
 					selectedQuizContent = quizResponse.GetQuizContent()
 					selectedQuizId = quizResponse.GetQuizId()
@@ -345,7 +359,8 @@ func dailyTask(s *mailServer, historyClient historypb.HistoryClient) {
 			// History에 전송 기록 저장
 			historyAddReq := &historypb.SaveHistoryRequest{
 				UserId: user.MemberId,
-				QuizId: selectedQuizId, // 퀴즈의 고유 ID
+				QuizId: selectedQuizId,
+				Level:  user.Level,
 			}
 			_, err = historyClient.SaveHistory(context.Background(), historyAddReq)
 			if err != nil {
@@ -380,7 +395,6 @@ func main() {
 
 	// History 서비스 클라이언트 생성
 	historyClient := historypb.NewHistoryClient(conn)
-
 	go func() {
 		log.Printf("start gRPC server on %s port", "9000")
 		if err := grpcServer.Serve(lis); err != nil {
