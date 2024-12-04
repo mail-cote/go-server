@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package history.v1;
+package history;
 
 option go_package = "github.com/mail-cote/go-server/history-service/history";
 

@@ -12,7 +12,6 @@ RUN apt-get update && apt-get install -y protobuf-compiler
 RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 
-
 # $GOPATH/bin을 PATH에 추가
 ENV PATH="/go/bin:${PATH}"
 
@@ -41,11 +40,11 @@ RUN go get github.com/go-sql-driver/mysql \
     google.golang.org/grpc
 RUN go get github.com/mail-cote/go-server/member-service/member 
 
-# 컨테이너 내 /app/server/main.go를 빌드하여 실행 가능한 바이너리 파일 server를 생성
-RUN go build -o server ./server/main.go
+# 컨테이너 내 /app/member-service/server/main.go를 빌드하여 실행 가능한 바이너리 파일 server를 생성
+RUN go build -o server_binary ./server/main.go
 
 # 서버가 수신 대기할 포트 번호 설정
 EXPOSE 50052
 
-# 컨테이너가 실행될 때 /app/server 바이너리를 실행
-CMD ["./server"]
+# 컨테이너가 실행될 때 /member-service/server_binary 실행파일을 실행
+CMD ["./server_binary"]

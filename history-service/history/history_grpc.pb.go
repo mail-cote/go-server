@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v5.28.3
-// source: history.proto
+// source: history-service/history/history.proto
 
 package history
 
@@ -19,8 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	History_SaveHistory_FullMethodName   = "/history.v1.History/saveHistory"
-	History_GetAllHistory_FullMethodName = "/history.v1.History/getAllHistory"
+	History_SaveHistory_FullMethodName   = "/history.History/saveHistory"
+	History_GetAllHistory_FullMethodName = "/history.History/getAllHistory"
 )
 
 // HistoryClient is the client API for History service.
@@ -146,7 +146,7 @@ func _History_GetAllHistory_Handler(srv interface{}, ctx context.Context, dec fu
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var History_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "history.v1.History",
+	ServiceName: "history.History",
 	HandlerType: (*HistoryServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -159,5 +159,5 @@ var History_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "history.proto",
+	Metadata: "history-service/history/history.proto",
 }

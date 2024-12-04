@@ -1,0 +1,18 @@
+# 가상 환경과 캐시
+frontend-service/app/venv
+frontend-service/app/__pycache__
+
+# 소스 코드 관리 파일
+.git
+.gitignore
+
+# Kubernetes 관련 파일 (Docker 이미지에는 필요하지 않음)
+frontend-service/k8s
+member-service/k8s
+
+# 빌드 도구 및 불필요한 파일
+*.log
+*.tmp
+
+# 개인화 파일
+*.swp

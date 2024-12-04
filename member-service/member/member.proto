@@ -22,10 +22,12 @@ message UpdateMemberRequest {
   int32 member_id = 1;
   string level = 2;       // 새 난이도
   string password = 3;    // 새 비밀번호
+  string old_password = 4; // 기존 비밀번호  --> 비밀번호 대조를 위함!
 }
 
 message DeleteMemberRequest {
   int32 member_id = 1;
+  string old_password = 2; // 기존 비밀번호
 }
 
 message CreateMemberResponse {
@@ -40,9 +42,19 @@ message DeleteMemberResponse {
   string message = 1;
 }
 
+// 이메일로 회원 ID 조회
+message GetMemberByEmailRequest {
+  string email = 1;
+}
+
+message GetMemberByEmailResponse {
+  int32 member_id = 1;
+}
+
 // Member Service 정의
 service MemberService {
   rpc CreateMember (CreateMemberRequest) returns (CreateMemberResponse);
   rpc UpdateMember (UpdateMemberRequest) returns (UpdateMemberResponse);
   rpc DeleteMember (DeleteMemberRequest) returns (DeleteMemberResponse);  
+  rpc GetMemberByEmail (GetMemberByEmailRequest) returns (GetMemberByEmailResponse);
 }

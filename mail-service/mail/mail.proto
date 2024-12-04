@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package mail.v1;
+package mail;
 
 option go_package = "github.com/mail-cote/go-server/mail-service/mail";
 
