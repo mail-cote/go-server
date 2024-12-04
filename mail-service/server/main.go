@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"context"
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"html/template"
@@ -21,6 +20,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"                                 // MySQL 드라이버
 	historypb "github.com/mail-cote/go-server/history-service/history" // History 모듈의 gRPC 패키지
 	mailpb "github.com/mail-cote/go-server/mail-service/mail"
+	memberpb "github.com/mail-cote/go-server/member-service/member"
 
 	"google.golang.org/grpc"
 )
@@ -55,7 +55,7 @@ const (
 	SMTPServer   = "smtp.gmail.com"
 	SMTPPort     = "587"
 	SMTPUsername = "mailcote1111@gmail.com"
-	SMTPPassword = "zfmvzogpftiyqeeb"
+	SMTPPassword = "ldqnvppvbktsktee"
 )
 
 // grpc: 버킷에서 랜덤 퀴즈값 가져오기
@@ -142,11 +142,8 @@ func (s *mailServer) SendMail(ctx context.Context, req *mailpb.SendMailRequest) 
 		return nil, err
 	}
 
-	// HTML 템플릿 파일 경로
-	templatePath := "mail_template.html"
-
 	// HTML 템플릿 읽기 및 파싱
-	tmpl, err := template.ParseFiles(templatePath)
+	tmpl, err := template.ParseFiles("mail_template.html")
 	if err != nil {
 		return nil, err
 	}
@@ -208,59 +205,76 @@ func (s *mailServer) SendMail(ctx context.Context, req *mailpb.SendMailRequest) 
 
 	// SMTP 메일 전송 설정
 	auth := smtp.PlainAuth("", SMTPUsername, SMTPPassword, SMTPServer)
-	header := fmt.Sprintf("MIME-version: 1.0;\r\nContent-Type: text/html; charset=\"UTF-8\";\r\n")
+	header := fmt.Sprintf("MIME-version: 1.0\r\n")
+	header += fmt.Sprintf("Content-Type: text/html; charset=\"UTF-8\";\r\n")
 	header += fmt.Sprintf("Subject: %s\r\n", from)
 	header += fmt.Sprintf("To: %s\r\n", to)
+	header += "\r\n" // 헤더와 본문을 구분하는 빈 줄 추가
 
-	// HTML 템플릿을 이메일 본문으로 사용
-	message := header + "\r\n" + bodyBuffer.String()
-
-	err = smtp.SendMail(SMTPServer+":"+SMTPPort, auth, SMTPUsername, []string{to}, []byte(message))
-	if err != nil {
-		return nil, fmt.Errorf("failed to send email: %v", err)
+	dialer := &net.Dialer{
+		Timeout: 60 * time.Second, // 타임아웃을 설정합니다.
 	}
 
+	// HTML 템플릿을 이메일 본문으로 사용
+	message := header + bodyBuffer.String()
+
+	// SMTP 서버 연결
+	conn, err := dialer.Dial("tcp", SMTPServer+":"+SMTPPort)
+	if err != nil {
+		return nil, fmt.Errorf("failed to connect to SMTP server: %v", err)
+	}
+	defer conn.Close()
+
+	// SMTP 클라이언트 생성
+	client, err := smtp.NewClient(conn, SMTPServer)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create SMTP client: %v", err)
+	}
+
+	// SMTP 인증
+	if err := client.Auth(auth); err != nil {
+		return nil, fmt.Errorf("failed to authenticate: %v", err)
+	}
+
+	// 발신자 및 수신자 설정
+	if err := client.Mail(from); err != nil {
+		return nil, fmt.Errorf("failed to set MAIL FROM: %v", err)
+	}
+	if err := client.Rcpt(to); err != nil {
+		return nil, fmt.Errorf("failed to set RCPT TO: %v", err)
+	}
+
+	// 메일 본문 작성
+	writer, err := client.Data()
+	if err != nil {
+		return nil, fmt.Errorf("failed to get writer for email body: %v", err)
+	}
+
+	_, err = writer.Write([]byte(message))
+	if err != nil {
+		return nil, fmt.Errorf("failed to write email body: %v", err)
+	}
+
+	// 이메일 전송 완료
+	if err := writer.Close(); err != nil {
+		return nil, fmt.Errorf("failed to close email writer: %v", err)
+	}
+
+	// SMTP 세션 종료
+	if err := client.Quit(); err != nil {
+		return nil, fmt.Errorf("failed to quit SMTP session: %v", err)
+	}
+
+	log.Printf("Mail sent to %s successfully!", to)
+
+	// 성공적으로 메일을 보낸 후 응답을 반환
 	return &mailpb.SendMailResponse{
 		Message: "Email sent successfully!",
 	}, nil
 }
 
-// **********************************************************************************************************************************
-// connectToMySQL: SSH를 통해 MySQL 연결
-func connectToMySQL() (*sql.DB, error) {
-	// MySQL DSN (Data Source Name)
-	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s", DBUser, DBPassword, DBHost, DBName)
-
-	// net.Dial을 사용하여 MySQL과 연결
-	db, err := sql.Open("mysql", dsn)
-	if err != nil {
-		return nil, fmt.Errorf("failed to connect to MySQL: %v", err)
-	}
-	return db, nil
-}
-
-// fetchUsersFromDB: GCP SQL에서 사용자 정보 가져오기
-func fetchUsersFromDB(db *sql.DB) ([]Member, error) {
-	rows, err := db.Query("SELECT member_id, email, level FROM Member")
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	var members []Member
-	for rows.Next() {
-		var member Member
-		if err := rows.Scan(&member.MemberId, &member.Email, &member.Level); err != nil {
-			return nil, err
-		}
-		members = append(members, member)
-	}
-	return members, nil
-}
-
-// ************************************************************************************************************************************
 // 매일 아침 7시에 실행되는 작업
-func dailyTask(s *mailServer, historyClient historypb.HistoryClient) {
+func dailyTask(s *mailServer, historyClient historypb.HistoryClient, memberClient memberpb.MemberServiceClient) {
 	for {
 		// // 현재 시간 확인
 		// now := time.Now()
@@ -276,25 +290,25 @@ func dailyTask(s *mailServer, historyClient historypb.HistoryClient) {
 		// // 다음 실행 시간까지 대기
 		// time.Sleep(nextRun.Sub(now))
 
-		// 1분 대기
+		// 30초 대기
 		time.Sleep(30 * time.Second)
 
 		// 사용자별 작업 수행
 		log.Println("Starting task for sending quizzes every minute...")
 
-		// MySQL 연결
-		db, err := connectToMySQL()
+		memberReq := &memberpb.GetAllMemberRequest{}
+		memberResp, err := memberClient.GetAllMember(context.Background(), memberReq)
 		if err != nil {
-			log.Printf("Failed to connect to MySQL: %v", err)
-			continue
+			log.Fatalf("Failed to get members: %v", err)
 		}
-		defer db.Close()
 
-		// 사용자 정보 가져오기
-		users, err := fetchUsersFromDB(db)
-		if err != nil {
-			log.Printf("Error fetching users: %v", err)
-			continue
+		var users []Member
+		for _, grpcMember := range memberResp.Member {
+			users = append(users, Member{
+				MemberId: grpcMember.MemberId,
+				Email:    grpcMember.Email,
+				Level:    grpcMember.Level,
+			})
 		}
 
 		// 각 사용자에 대해 JSON 파일을 랜덤으로 선택하고 메일 전송
@@ -347,7 +361,7 @@ func dailyTask(s *mailServer, historyClient historypb.HistoryClient) {
 			// SendMail 호출: 퀴즈 내용을 이메일로 전송
 			sendMailResponse, err := s.SendMail(context.Background(), &mailpb.SendMailRequest{
 				SendTo:      user.Email,
-				SendFrom:    "mailcote1111@gmail.com", // 보낼 이메일 주소 설정
+				SendFrom:    SMTPUsername, // 보낼 이메일 주소 설정
 				QuizContent: selectedQuizContent,
 			})
 			if err != nil {
@@ -383,18 +397,24 @@ func main() {
 	mailServer := &mailServer{} // mailServer 객체 생성
 	mailpb.RegisterMailServer(grpcServer, mailServer)
 
-	// History 서비스의 gRPC 서버 주소
-	const historyServiceAddress = "localhost:9001"
-
-	// gRPC 연결 생성
-	conn, err := grpc.Dial(historyServiceAddress, grpc.WithInsecure())
+	// gRPC 연결 생성(history)
+	conn1, err := grpc.Dial("localhost:9001", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("🚨 Failed to connect to History service: %v", err)
 	}
-	defer conn.Close()
+	defer conn1.Close()
+
+	// gRPC 연결 생성(member)
+	conn2, err := grpc.Dial("localhost:50052", grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("🚨 Failed to connect to History service: %v", err)
+	}
+	defer conn2.Close()
 
 	// History 서비스 클라이언트 생성
-	historyClient := historypb.NewHistoryClient(conn)
+	historyClient := historypb.NewHistoryClient(conn1)
+	memberServiceClient := memberpb.NewMemberServiceClient(conn2)
+
 	go func() {
 		log.Printf("start gRPC server on %s port", "9000")
 		if err := grpcServer.Serve(lis); err != nil {
@@ -403,8 +423,7 @@ func main() {
 	}()
 
 	// 매일 아침 7시에 작업을 실행하는 goroutine 시작
-	go dailyTask(mailServer, historyClient) // mailServer 객체를 dailyTask에 전달
-
+	go dailyTask(mailServer, historyClient, memberServiceClient) // mailServer 객체를 dailyTask에 전달
 	// 서버가 종료되지 않도록 대기
 	select {}
 }
