@@ -1,46 +1,85 @@
-Mail-Cote : 코딩테스트 메일 전송 서비스
+# 📫 **Mail-Cote**: 코딩테스트 메일 전송 서비스 📫
+![KakaoTalk_Photo_2024-12-05-16-07-31](https://github.com/user-attachments/assets/91f4ac29-c0b8-49c9-81eb-998e2a1bd83a)
 
-Apache Airflow badge Amazon S3 badge Amazos AWS badge prometheus badge grafana badge python badge Flask badge
-
-Mail-Cote 는 grpc와 GKE(Google Kubernetes Engine)을 이용한 코딩테스트 메일 전송 서비스입니다.
-
-매일 7시 사용자의 난이도에 맞는 문제를 큐레이팅해 이메일로 전송해주는 서비스입니다.
-
-
-🔍 Preview
-http://mail-cote.site/ 접속
-
-사용자의 이메일, 비밀번호, 난이도 작성.
-이후 7시 정각 난이도에 해당하는 문제 전송.
-
-🧑🏻‍💻 Members
-팀 8조입니다! grpc와 GKE를 적극적으로 활용해보고 이를 적용시키고자 노력했습니다.
-
-허윤지 송성훈			
-			
-:-:	:-:		
-허윤지 송성훈			
-			
-
-⌘ Project BackGround
-
-배경 : 코딩테스트 문제를 등한시 하는 경우가 많고, 문제를 자주 푸는 습관을 기르기가 어렵다.
-
-목표 : 코딩테스트를 자주 접함으로서, 코테 실력 향상과 습관을 기를 수 있습니다.
+![GKE](https://img.shields.io/badge/GKE-blue)
+![gRPC](https://img.shields.io/badge/gRPC-green)
+![GCP](https://img.shields.io/badge/GCP-orange)
+![Golang](https://img.shields.io/badge/Golang-blue)
+![Cloud SQL](https://img.shields.io/badge/Cloud%20SQL-lightblue)
+![Docker](https://img.shields.io/badge/Docker-2496ED)
+![Nginx](https://img.shields.io/badge/Nginx-darkgreen)
+![Streamlit](https://img.shields.io/badge/Streamlit-red)
+![GCS](https://img.shields.io/badge/GCS-blue)
 
 
-⚙️ Service Architecture
-<img width="1049" alt="스크린샷 2024-12-05 오후 3 41 10" src="https://github.com/user-attachments/assets/540b1aa7-011e-43fd-a881-48f23c595458">
-1️⃣ grpc를 통한 모듈간의 통신
-grpc는 원격 모듈의 함수를 마치 자신의 모듈에서 함수를 호출하는 것처럼 하는 원격 프로시져 프로토콜이다. 
-이를 통해 모듈의 DB연결을 최소화하고, 원격 모듈의 함수사용을 통해 메인 서버의 처리 속도 증가.
+---
+
+Mail-Cote는 **gRPC**와 **Google Kubernetes Engine**를 활용한 **코딩테스트 메일 전송 서비스**입니다.  
+매일 **오전 7시**, 사용자의 난이도에 맞는 문제를 큐레이팅해 이메일로 전송합니다.
+
+🔗 [**서비스 바로가기**](http://mail-cote.site/)
+
+---
+
+## 📋 **서비스 기능**
+1. 사용자는 이메일, 비밀번호, 난이도를 입력.
+2. 매일 **오전 7시**, 사용자의 난이도에 맞는 코딩테스트 문제를 이메일로 전송.
+3. 큐레이션된 문제를 통해 코딩테스트 실력을 꾸준히 향상.
+
+---
+
+## 👩🏻‍💻 **Members**
+| Name   | Role       |
+|--------|------------|
+| 허윤지 | Back-End   |
+| 송성훈 | Back-End   |
+
+**팀 8조**는 `gRPC`와 `GKE`를 적극적으로 활용하며 모듈 간 통신을 효율화하고 확장 가능한 서비스를 제공합니다.
+
+---
+
+## 🧑🏻‍💻 **프로젝트 배경**
+- **배경**: 코딩테스트 문제를 등한시하거나 꾸준히 풀지 못하는 경우가 많음.
+- **목표**: 코딩테스트 문제를 매일 접하며 실력 향상과 학습 습관을 형성.
+
+---
+
+## ⚙️ **서비스 아키텍처**
+<img width="1062" alt="스크린샷 2024-12-05 오후 4 04 53" src="https://github.com/user-attachments/assets/e3e69110-c49c-46ad-a692-851f39bb3369">
+
+### 1️⃣ **gRPC를 통한 모듈 간 통신**
+- `gRPC`: 원격 모듈의 함수를 로컬처럼 호출할 수 있는 원격 프로시저 프로토콜.
+- 모듈 간 DB 연결 최소화 및 처리 속도 최적화.
+
+### 2️⃣ **GKE를 통한 Pod 관리**
+- `GKE`: Kubernetes 기반의 컨테이너 오케스트레이션 플랫폼.
+- Dockerfile, ReplicaSet 등을 활용하여 서비스 안정성 확보.
+
+### 3️⃣ **GCS Bucket을 이용한 데이터 관리**
+- `Google Cloud Storage`: 크롤링 데이터를 `.json` 파일로 저장 및 관리.
+- 외부 서버에서 디지털 데이터를 효율적으로 관리.
+
+### 4️⃣ **Cloud sqld을 통한 RDBMS 관리**
+- 자동 백업, 및 손쉬운 복구
+- Google Cloud 관리형 서비스이므로, 호율적 운영 및 확장 가능성 측면에서 좋음.
+---
+
+## 🛠️ **Tech Stack**
+- **Language**: Python, Go
+- **Framework**: gRPC
+- **Infrastructure**: GKE, Docker, GCS, Cloud sql
+- **Plus**: Nginx, Streamlit
+
+---
+
+## 🌟 **프로젝트 미리보기**
+서비스 미리보기 페이지: [**Mail-Cote**](http://mail-cote.site/)
+
+---
 
 
-2️⃣ GKE를 통한 pod 관리
-...dockerfile, replicaset,... 등
-
-
-3️⃣ GCS bucket을 이용한 크롤링 데이터 관리
-GCS: 사이트 외부 위치의 서버에 디지털 데이터가 저장되는 컴퓨터 데이터 스토리지 모드.
-이를 활용해 크롤링한 데이터를 .json으로 저장 및 관리
-
+## 📈 **Future Plans**
+1. 코딩테스트 문제 추천 알고리즘 고도화.
+2. UI/UX 개선 및 대시보드 추가.
+3. 다양한 코딩테스트 플랫폼 연동(GitHub Copilot, LeetCode, etc).
+4. 기능 확장
