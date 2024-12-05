@@ -9,41 +9,50 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f9;
+            background-color: #f8f9fa; /* 밝은 회색 배경 */
         }
         .container {
-            background-color: rgb(130, 255, 151);
+            background-color: #fff; /* 하얀 배경으로 문제지 느낌 */
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            margin: 20px auto;
+            margin: 40px auto;
             max-width: 700px;
         }
         h4 {
             font-size: 18px;
             color: #555;
-            margin: 0 0 10px;
+            margin: 0;
         }
         .header {
             display: flex;
-            justify-content: space-between;
+            justify-content: space-between; /* 왼쪽: Mail-Cote, 오른쪽: field */
             align-items: center;
             border-bottom: 2px solid #e0e0e0;
             padding-bottom: 10px;
         }
+        .header .left {
+            display: flex;
+            align-items: center; /* 이미지와 Mail-Cote 정렬 */
+        }
+        .header img {
+            height: 40px; /* 이미지 크기 조정 */
+            margin-right: 10px; /* Mail-Cote와 이미지 간격 */
+        }
         .header .field {
             font-size: 14px;
             color: #888;
+            margin-left: 10px; /* Mail-Cote와 Field 간격 */
         }
         h1 {
             font-size: 20px;
             color: #333;
-            margin: 20px 0;
+            margin: 30px 0 20px;
         }
         .subheading {
             font-size: 16px;
             color: #444;
-            margin: 15px 0 5px;
+            margin: 25px 0 10px; /* 각 제목 간격 키우기 */
         }
         .description {
             font-size: 14px;
@@ -57,8 +66,18 @@
             max-width: 100%;
             height: auto;
         }
+        .time-memory {
+            display: flex;
+            justify-content: space-between; /* 시간 제한, 메모리 제한 같은 줄 */
+            margin: 10px 0;
+        }
+        .time-memory p {
+            margin: 0; /* 간격 제거 */
+            font-size: 14px;
+            color: #555;
+        }
         .code-block {
-            background-color: #f8f9fa;
+            background-color: #e8fcef; /* 연한 연두색 배경 */
             padding: 10px;
             border-radius: 5px;
             font-family: monospace;
@@ -71,8 +90,8 @@
         .btn {
             display: inline-block;
             text-decoration: none;
-            background-color: #007bff;
-            color: #fff;
+            background-color: #007bff; /* 파란색 배경 */
+            color: #fff; /* 흰색 글씨 */
             padding: 10px 15px;
             font-size: 14px;
             font-weight: bold;
@@ -83,13 +102,21 @@
         .btn:hover {
             background-color: #0056b3;
         }
+        .btn-wrapper {
+            display: flex;
+            justify-content: center; /* 버튼을 가운데 정렬 */
+            margin-top: 50px; /* 출력 예제와 버튼 사이 간격 */
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Header Section -->
         <div class="header">
-            <h4>Mail-Cote</h4>
+            <div style="display: flex; align-items: center;">
+                <img src="logo.png" alt="Logo"> <!-- 로고 이미지 -->
+                <h4>Mail-Cote</h4>
+            </div>
             <span class="field">{{.Field}}</span>
         </div>
 
@@ -97,8 +124,10 @@
         <h1>오늘의 문제: {{.QuizTitle}}</h1>
 
         <!-- Time and Memory Limit Section -->
-        <p><strong>Time Limit:</strong> {{.TimeLimit}}</p>
-        <p><strong>Memory Limit:</strong> {{.MemoryLimit}}</p>
+        <div class="time-memory">
+            <p><strong>Time Limit:</strong> {{.TimeLimit}}</p>
+            <p><strong>Memory Limit:</strong> {{.MemoryLimit}}</p>
+        </div>
 
         <!-- Description Section -->
         <h2 class="subheading">문제 설명:</h2>
@@ -133,7 +162,9 @@
         <div class="code-block">{{.OutputEx}}</div>
 
         <!-- View Problem Button -->
-        <a class="btn" href="{{.URL}}" target="_blank">문제 보기</a>
+        <div class="btn-wrapper">
+            <a class="btn" href="{{.URL}}" target="_blank">문제 보기</a>
+        </div>
     </div>
 </body>
 </html>

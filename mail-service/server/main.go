@@ -208,7 +208,7 @@ func (s *mailServer) SendMail(ctx context.Context, req *mailpb.SendMailRequest) 
 	auth := smtp.PlainAuth("", SMTPUsername, SMTPPassword, SMTPServer)
 	header := fmt.Sprintf("MIME-version: 1.0\r\n")
 	header += fmt.Sprintf("Content-Type: text/html; charset=\"UTF-8\";\r\n")
-	header += fmt.Sprintf("Subject: %s\r\n", from)
+	header += "Subject: 오늘의 코딩 테스트 문제가 도착했어요!\r\n"
 	header += fmt.Sprintf("To: %s\r\n", to)
 	header += "\r\n" // 헤더와 본문을 구분하는 빈 줄 추가
 
