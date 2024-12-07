@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: history-service
+  labels:
+    app: history-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: history-service
+  template:
+    metadata:
+      labels:
+        app: history-service
+    spec:
+      containers:
+        - name: history-service
+          image: asia-northeast3-docker.pkg.dev/gifted-bongo-442811-h6/history-docker-repo/yoonheoz/history-service:1.1
+          ports:
+            - containerPort: 9001 # gRPC history가 사용하는 포트
+
+            
+          env:
+            - name: DB_USER
+              value: "root"
+            - name: DB_PASSWORD
+              value: "gdsc1111"
+            - name: DB_HOST
+              value: "34.22.95.16"  # GCP Cloud SQL
+            - name: DB_PORT
+              value: "3306"
+            - name: DB_NAME
+              value: "mail_cote"

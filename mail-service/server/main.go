@@ -41,7 +41,7 @@ type Member struct {
 const (
 	DBUser     = "root"        // MySQL 사용자 이름
 	DBPassword = "gdsc1111"    // MySQL 비밀번호
-	DBHost     = "34.22.95.16" // 로컬 MySQL 서버 (localhost)
+	DBHost     = "34.22.95.16" // (GCP)CLOUD SQL
 	DBPort     = "3306"        // MySQL 포트
 	DBName     = "mail_cote"   // MySQL 데이터베이스 이름
 )
@@ -208,7 +208,7 @@ func (s *mailServer) SendMail(ctx context.Context, req *mailpb.SendMailRequest) 
 	auth := smtp.PlainAuth("", SMTPUsername, SMTPPassword, SMTPServer)
 	header := fmt.Sprintf("MIME-version: 1.0\r\n")
 	header += fmt.Sprintf("Content-Type: text/html; charset=\"UTF-8\";\r\n")
-	header += fmt.Sprintf("Subject: %s\r\n", from)
+	header += fmt.Sprintf("Subject: Daily Coding Quiz\r\n")
 	header += fmt.Sprintf("To: %s\r\n", to)
 	header += "\r\n" // 헤더와 본문을 구분하는 빈 줄 추가
 
@@ -281,22 +281,22 @@ func (s *mailServer) SendMail(ctx context.Context, req *mailpb.SendMailRequest) 
 // 매일 아침 7시에 실행되는 작업
 func dailyTask(s *mailServer, historyClient historypb.HistoryClient, memberClient memberpb.MemberServiceClient) {
 	for {
-		// // 현재 시간 확인
-		// now := time.Now()
+		// 현재 시간 확인
+		now := time.Now()
 
-		// // 매일 아침 7시로 설정
-		// nextRun := time.Date(now.Year(), now.Month(), now.Day(), 7, 0, 0, 0, now.Location())
+		// 매일 아침 7시로 설정
+		nextRun := time.Date(now.Year(), now.Month(), now.Day(), 8, 00, 0, 0, now.Location())
 
-		// // 현재 시간 이후 7시가 되기를 기다림
-		// if now.After(nextRun) {
-		// 	nextRun = nextRun.Add(24 * time.Hour) // 7시가 지났다면 다음날 7시로 설정
-		// }
+		// 현재 시간 이후 7시가 되기를 기다림
+		if now.After(nextRun) {
+			nextRun = nextRun.Add(24 * time.Hour) // 7시가 지났다면 다음날 7시로 설정
+		}
 
-		// // 다음 실행 시간까지 대기
-		// time.Sleep(nextRun.Sub(now))
+		// 다음 실행 시간까지 대기
+		time.Sleep(nextRun.Sub(now))
 
 		// 30초 대기
-		time.Sleep(30 * time.Second)
+		// time.Sleep(30 * time.Second)
 
 		// 사용자별 작업 수행
 		log.Println("Starting task for sending quizzes every minute...")
@@ -403,14 +403,14 @@ func main() {
 	mailpb.RegisterMailServer(grpcServer, mailServer)
 
 	// gRPC 연결 생성(history)
-	conn1, err := grpc.Dial("localhost:9001", grpc.WithInsecure())
+	conn1, err := grpc.Dial("history-service:9001", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("🚨 Failed to connect to History service: %v", err)
 	}
 	defer conn1.Close()
 
 	// gRPC 연결 생성(member)
-	conn2, err := grpc.Dial("localhost:50052", grpc.WithInsecure())
+	conn2, err := grpc.Dial("member-service:50052", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("🚨 Failed to connect to History service: %v", err)
 	}

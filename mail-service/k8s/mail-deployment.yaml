@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mail-service
+  labels:
+    app: mail-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mail-service
+  template:
+    metadata:
+      labels:
+        app: mail-service
+    spec:
+      containers:
+        - name: mail-service
+          image: asia-northeast3-docker.pkg.dev/gifted-bongo-442811-h6/mail-docker-repo/yoonheoz/mail-service:1.7
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9000 # gRPC mail이 사용하는 포트
+
+
+          env:
+            - name: DB_USER
+              value: "root"
+            - name: DB_PASSWORD
+              value: "gdsc1111"
+            - name: DB_HOST
+              value: "34.22.95.16"  # GCP Cloud SQL
+            - name: DB_PORT
+              value: "3306"
+            - name: DB_NAME
+              value: "mail_cote"
+            - name: BUCKET_NAME
+              value: "mail-cote-bucket"
+            - name: SMTP_USERNAME
+              value: "mailcote1111@gmail.com"
+            - name: SMTP_PASSWORD
+              value: "ldqnvppvbktsktee"

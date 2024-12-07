@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: member-service
-        image: asia-northeast3-docker.pkg.dev/gifted-bongo-442811-h6/member-docker-repo/yoonheoz/member-service:1.0
+        image: asia-northeast3-docker.pkg.dev/gifted-bongo-442811-h6/member-docker-repo/yoonheoz/member-service:1.2
         ports:
         - containerPort: 50052 # gRPC member 서버가 사용하는 포트
 

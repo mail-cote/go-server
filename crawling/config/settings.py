@@ -1,11 +1,12 @@
 # 크롤링 시작 URL
 START_URLS = [
-
-    {"field": "Gold 5", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=11"},
-    {"field": "Gold 4", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=12"},
-    {"field": "Gold 3", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=13"},
     {"field": "Gold 2", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=14"},
     {"field": "Gold 1", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=15"},
+    {"field": "Platinum 5", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=16"},
+    {"field": "Platinum 4", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=17"},
+    {"field": "Platinum 3", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=18"},
+    {"field": "Platinum 2", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=19"},
+    {"field": "Platinum 1", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=20"},
 ]
 
 
@@ -23,6 +24,9 @@ START_URLS = [
     {"field": "Silver 2", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=9"},
     {"field": "Silver 1", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=10"},
 
+    {"field": "Gold 5", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=11"},
+    {"field": "Gold 4", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=12"},
+    {"field": "Gold 3", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=13"},
 
     {"field": "Platinum 5", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=16"},
     {"field": "Platinum 4", "url": "https://www.acmicpc.net/problemset?sort=no_asc&tier=17"},
